@@ -19,7 +19,7 @@ const TaskList = styled.div`
   padding: 8px;
   flex-grow: 1;
   min-height: 150px;
-  transition: background-color 0.2s ease;
+  transition: background-color 0.1s ease;
   background-color: ${props => props.isDraggingOver ? 'lightblue' : 'inherit'};
 `;
 
