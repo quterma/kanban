@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, PureComponent } from "react";
 import initialData from "./initialData";
 import Column from "./Column";
 import { DragDropContext, Droppable } from "react-beautiful-dnd";
@@ -8,6 +8,14 @@ import styled from "styled-components";
 const Container = styled.div`
 	display: flex;
 `;
+
+class InnerList extends PureComponent {
+	render() {
+		const { column, taskMap, index, isDropDisabled } = this.props;
+		const tasks = column.taskIds.map(taskId => taskMap[taskId]);
+		return <Column column={column} tasks={tasks} index={index} isDropDisabled={isDropDisabled} />;
+	}
+}
 
 class Dnd extends Component {
 	state = initialData;
@@ -94,13 +102,18 @@ class Dnd extends Component {
 						<Container ref={provided.innerRef} {...provided.droppableProps}>
 							{this.state.columnOrder.map((columnId, index) => {
 								const column = this.state.columns[columnId];
-								const tasks = column.taskIds.map(taskId => this.state.tasks[taskId]);
 
 								// condition disabling droppable if you move from right to left or try to move furtherer than to the next list
 								const isDropDisabled = index < this.state.homeIndex || index > this.state.homeIndex + 1;
 
 								return (
-									<Column key={column.id} column={column} tasks={tasks} isDropDisabled={isDropDisabled} index={index} />
+									<InnerList
+										key={column.id}
+										column={column}
+										taskMap={this.state.tasks}
+										isDropDisabled={isDropDisabled}
+										index={index}
+									/>
 								);
 							})}
 							{provided.placeholder}
