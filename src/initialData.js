@@ -8,18 +8,24 @@ const initialData = {
 	columns: {
 		"column-1": {
 			id: "column-1",
-			title: "To do",
+			title: "Backlog",
 			// this property shows an affiliation to the column and an order in it
 			taskIds: ["task-1", "task-2", "task-3", "task-4"],
 		},
 		"column-2": {
 			id: "column-2",
-			title: "In Progress",
+			title: "Ready",
 			// this property shows an affiliation to the column and an order in it
 			taskIds: [],
 		},
 		"column-3": {
 			id: "column-3",
+			title: "In Progress",
+			// this property shows an affiliation to the column and an order in it
+			taskIds: [],
+		},
+		"column-4": {
+			id: "column-4",
 			title: "Finished",
 			// this property shows an affiliation to the column and an order in it
 			taskIds: [],
@@ -27,7 +33,7 @@ const initialData = {
 	},
 
 	// Facilitate reordering of the columns
-	columnOrder: ["column-1", "column-2", "column-3"],
+	columnOrder: ["column-1", "column-2", "column-3", "column-4"],
 };
 
 export default initialData;
