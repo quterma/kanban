@@ -1,7 +1,4 @@
 import React, { useCallback } from "react";
-import Column from "./features/kanban/Column";
-import { DragDropContext, Droppable } from "react-beautiful-dnd";
-import styled from "styled-components";
 import { useSelector, useDispatch } from "react-redux";
 import {
 	setHomeIndex,
@@ -12,19 +9,16 @@ import {
 	selectColumns,
 	selectTasks,
 } from "./features/kanban/kanbanSlice";
+import { DragDropContext, Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import { reorder } from "./features/kanban/utils";
+import ContainerInnerList from "./features/kanban/ContainerInnerList";
 
-// component styling with 'styled-components'
+// styling
 const Container = styled.div`
 	display: flex;
 `;
 
-const InnerList = props => {
-	const { column, taskMap, index, isDropDisabled } = props;
-	const tasks = column.taskIds.map(taskId => taskMap[taskId]);
-	return <Column column={column} tasks={tasks} index={index} isDropDisabled={isDropDisabled} />;
-};
-
-// main Component
 const App = () => {
 	const dispatch = useDispatch();
 	const columnOrder = useSelector(selectColumnOrder);
@@ -32,95 +26,90 @@ const App = () => {
 	const tasks = useSelector(selectTasks);
 	const homeIndex = useSelector(selectHomeIndex);
 
-	// A drag has started. We use this f() to block updates to all <Draggable /> and <Droppable /> components during a drag.
+	// ===== A drag has started. DnD use this responder to block updates to all <Draggable /> and <Droppable /> components during a drag.
 	const onDragStart = useCallback(
 		start => {
-			// Here we set an index of a home column into state
+			// Setting a start column index into state
 			const homeIndex = columnOrder.indexOf(start.source.droppableId);
 			dispatch(setHomeIndex({ homeIndex }));
 		},
 		[columnOrder, dispatch]
 	);
 
-	// A drag has ended. It is the responsibility of this responder to synchronously apply changes that has resulted from the drag.
+	// ===== A drag has ended. DnD use this responder to synchronously apply changes that has resulted from the drag.
 	const onDragEnd = useCallback(
 		result => {
-			// Nullifying of an index in state after drag end
+			// Nullifying a start column index in state
 			dispatch(setHomeIndex({ homeIndex: null }));
 
-			// destination: the location (droppableId and index) of where the dragging item is now.
-			// This can be null if the user is currently not dragging over any < Droppable />
-			// source: the location (droppableId and index) of where the dragging item has started within a <Droppable />.
-			// draggableId: draggable task (element) id
+			// Destination: location (droppableId (column id or 'all-columns) and draggable element index) of where
+			// the dragging item is now(after dragging). Could be null if the user is currently not dragging over any < Droppable />
+			// Source: the location (droppableId and index) of where the dragging item has started within a <Droppable />.
+			// DraggableId: draggable id
+			// type of dragged element - 'task' or 'columns'
 			const { destination, source, draggableId, type } = result;
 
-			// Check - if a Draggable element has been moved to the previous position - stops, else - move further
+			// Check - if a Draggable has been moved to the previous position - return, else - move further
 			if (!destination) return;
 			if (destination.droppableId === source.droppableIs && destination.index === source.index) return;
 
-			// moving columns
+			// =====  Columns moving logic starts here ======================================
 			if (type === "column") {
-				// make copy of columnOrder array, reorder columns in it, set into state
-				const newColumnOrder = Array.from(columnOrder);
-				newColumnOrder.splice(source.index, 1);
-				newColumnOrder.splice(destination.index, 0, draggableId);
-
+				// Creating a new column order array
+				const newColumnOrder = reorder(source, destination, draggableId, [...columnOrder])[0];
+				// Setting new columnOrder into state
 				dispatch(setColumnOrder(newColumnOrder));
 				return;
 			}
 
-			// this is just one of several possible ways for reordering in arrays - note for me for possible refactoring
-
-			// columns ids
+			// Source and destination droppable colums objects
 			const start = columns[source.droppableId];
 			const finish = columns[destination.droppableId];
 
-			// if element moved within same column
+			// =====  Tasks moving within same column logic starts here ======================================
 			if (start === finish) {
-				// make a copy of taskIds, reorder Ids
-				const newTaskIds = Array.from(start.taskIds);
-				newTaskIds.splice(source.index, 1);
-				newTaskIds.splice(destination.index, 0, draggableId);
-
-				// kind of reducer in redux - make copy of state, change inside taskIds in droppable column
+				// Creating a new taskIds array
+				const newTaskIds = reorder(source, destination, draggableId, [...start.taskIds])[0];
+				// Creating a copy of start object with new taskIds
 				const newColumn = { ...start, taskIds: newTaskIds };
-
+				// Setting new column into state
 				dispatch(setColumn({ [newColumn.id]: newColumn }));
-				// this.setState(newState);
 				return;
 			}
 
-			// Moving from one list to another
-			// make copy of home list and remove draggableId
-			const startTasksIds = Array.from(start.taskIds);
-			startTasksIds.splice(source.index, 1);
+			// =====  Tasks moving from one column to another logic starts here ======================================
+			// Creating a new taskIds arrays
+			const [startTasksIds, finishTaskIds] = reorder(
+				source,
+				destination,
+				draggableId,
+				[...start.taskIds],
+				[...finish.taskIds]
+			);
+			// Creating copies of start and finish objects with new taskIds
 			const newStart = { ...start, taskIds: startTasksIds };
-			// make copy of finish list and add draggableId
-			const finishTaskIds = Array.from(finish.taskIds);
-			finishTaskIds.splice(destination.index, 0, draggableId);
 			const newFinish = { ...finish, taskIds: finishTaskIds };
-			// make copy of state and add necessary changes
-
+			// Setting new columns into state
 			dispatch(setColumn({ [newStart.id]: newStart }));
 			dispatch(setColumn({ [newFinish.id]: newFinish }));
 		},
+		// dependencies
 		[columnOrder, columns, dispatch]
 	);
 
 	return (
 		// DragDropContext - context area for DnD actions
 		<DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
+			{/* wrapper for droppable element */}
 			<Droppable droppableId="all-columns" direction="horizontal" type="column">
 				{provided => (
 					<Container ref={provided.innerRef} {...provided.droppableProps}>
 						{columnOrder.map((columnId, index) => {
 							const column = columns[columnId];
-
 							// condition disabling droppable if you move from right to left or try to move furtherer than to the next list
 							const isDropDisabled = index < homeIndex || index > homeIndex + 1;
-
 							return (
-								<InnerList
+								<ContainerInnerList
 									key={column.id}
 									column={column}
 									taskMap={tasks}

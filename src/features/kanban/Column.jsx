@@ -1,8 +1,9 @@
-import React, { Component, PureComponent } from 'react';
+import React from 'react';
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
-import Task from './Task';
+import ColumnInnerList from './ColumnInnerList';
 
+// styling
 const Container = styled.div`
   margin: 8px;
   border: 1px solid lightgrey;
@@ -23,33 +24,23 @@ const TaskList = styled.div`
   background-color: ${props => props.isDraggingOver ? 'lightblue' : 'inherit'};
 `;
 
-
-
-class InnerList extends PureComponent {
-
-  render() {
-    return this.props.tasks.map((task, index) => <Task key={task.id} task={task} index={index} />)
-  }
-}
-
-export default class Column extends Component {
-  render() {
+const Column = ({ column, tasks, index, isDropDisabled }) => {
     return (
       // Draggable wrapper - makes everything  draggable
-      <Draggable draggableId={this.props.column.id} index={this.props.index}>
+      <Draggable draggableId={column.id} index={index}>
         {(provided) => (
           <Container ref={provided.innerRef} {...provided.draggableProps}>
-            {/* Title here has draghandling props which makes this element draghandler */}
-            <Title {...provided.dragHandleProps}>{this.props.column.title}</Title>
+            {/* Title here has draghandling props which makes this element to be a draghandler */}
+            <Title {...provided.dragHandleProps}>{column.title}</Title>
             {/* wrapper for droppable element */}
-            <Droppable droppableId={this.props.column.id} isDropDisabled={this.props.isDropDisabled} type='task'>
+            <Droppable droppableId={column.id} isDropDisabled={isDropDisabled} type='task'>
               {(provided, snapshot) => (
                 <TaskList
                 ref={provided.innerRef}
                 {...provided.droppableProps}
                 isDraggingOver={snapshot.isDraggingOver}
                 >
-                  <InnerList tasks={this.props.tasks}/>
+                  <ColumnInnerList tasks={tasks}/>
                   {provided.placeholder}
                 </TaskList>
               )}
@@ -58,7 +49,6 @@ export default class Column extends Component {
         )}
       </Draggable>
     )
-
-  }
 }
 
+export default Column
