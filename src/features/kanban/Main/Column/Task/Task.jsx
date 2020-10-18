@@ -12,7 +12,7 @@ const Container = styled.div`
 
 const Task = ({ task, index}) => {
     return (
-      // Draggable - DnD element
+      // Draggable element
       <Draggable draggableId={task.id} index={index} >
         {(provided, snapshot) => (
           <Container
