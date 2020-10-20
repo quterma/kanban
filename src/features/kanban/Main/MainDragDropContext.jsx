@@ -91,7 +91,7 @@ const MainDragDropContext = () => {
 		// dependencies
 		[columnOrder, columns, dispatch]
   );
-  
+
   return (
 			// DragDropContext - context area for DnD actions
 			<DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>

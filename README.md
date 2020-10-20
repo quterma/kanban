@@ -1,5 +1,16 @@
 # kanban
 
+1. Используются библиотеки React, Redux - для практики;
+2. Используются библиотеки styled-components, react-beautiful-dnd - на пробу;
+3. Реализован следующие возможности DrugnDrop:
+
+- Flow списков реализовано "слева-направо";
+- Все колонки могут меняться местами - привязки Backlog к началу или Finished к концу не делал, поскольку нет всей картины;
+- Счетчики заданий в футере привязаны по индексу (первая и последняя колонки);
+- Задания могут перемещаться согласно общей логике Flow заданий и ТЗ, т.е. слева-направо, причем только на следующую колонку (однако можно перемешать колонки и "испортить" flow);
+
+4. Ограничений по количеству заданий в колонке не делал (хотя согласно концепции канбан стоит добавить WIP-limit)
+
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app), using the [Redux](https://redux.js.org/) and [Redux Toolkit](https://redux-toolkit.js.org/) template.
 
 ## Available Scripts

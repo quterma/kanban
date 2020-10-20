@@ -11,19 +11,6 @@ const Container = styled.div`
   justify-content: center;
   padding: 20px;
   overflow-x: auto;
-
-  &::-webkit-scrollbar {
-	height: 9px;
-	width: 9px;
-	}
-  &::-webkit-scrollbar-track {
-    border-radius: 6px;
-    background-color: rgb(14, 43, 38, 0.4);
-  }
-  &::-webkit-scrollbar-thumb {
-    border-radius: 6px;
-    background-color: rgba(255, 254, 214, 0.6);
-	}
 `;
 
 const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
@@ -44,6 +31,8 @@ const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
                 taskMap={tasks}
                 isDropDisabled={isDropDisabled}
                 index={index}
+                columns={columns}
+                columnOrder={columnOrder}
               />
             );
           })}

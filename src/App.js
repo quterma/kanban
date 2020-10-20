@@ -12,6 +12,18 @@ const GlobalStyle = createGlobalStyle`
 	}
 	* {
 		box-sizing: border-box;
+		&::-webkit-scrollbar {
+			height: 9px;
+			width: 9px;
+			}
+		&::-webkit-scrollbar-track {
+			border-radius: 6px;
+			background-color: rgb(14, 43, 38, 0.4);
+		}
+		&::-webkit-scrollbar-thumb {
+			border-radius: 6px;
+			background-color: rgba(255, 254, 214, 0.6);
+		}
 	}
 `;
 

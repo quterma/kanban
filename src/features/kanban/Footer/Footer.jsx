@@ -1,4 +1,6 @@
-import React from 'react'
+import React from 'react';
+import { useSelector } from "react-redux";
+import { selectColumnOrder,	selectColumns } from "./../kanbanSlice";
 import styled from 'styled-components';
 
 // styling
@@ -17,12 +19,15 @@ const Info = styled.div`
   float: ${props => props.float};
 `;
 
-const activeCount = '4';
-const finishedCount = '0';
 const userName = 'NAME';
 const date = '01.01.2020';
 
 const Footer = () => {
+  const columnOrder = useSelector(selectColumnOrder);
+  const columns = useSelector(selectColumns);
+  const activeCount = columns[columnOrder[0]].taskIds.length;
+  const finishedCount = columns[columnOrder[columnOrder.length - 1]].taskIds.length;
+
   return (
     <Container>
       <Info>Active tasks: {activeCount}</Info>

@@ -1,4 +1,4 @@
-import React from 'react'
+import React from 'react';
 import Task from "./Task/Task";
 
 // moved out this mapping for avoiding redundant rendering

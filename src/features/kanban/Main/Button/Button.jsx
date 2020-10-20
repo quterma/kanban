@@ -1,4 +1,4 @@
-import React from 'react'
+import React from "react";
 import styled from 'styled-components';
 import plus from './../../../../assets/images/plus.svg';
 
@@ -10,25 +10,26 @@ const AddCard = styled.button`
   border-radius: 5px;
   border: none;
   outline: none;
-  cursor: pointer;
   margin: 7px 11px;
   font-size: 18px;
   color: #5E6C84;
   padding: 4px;
   transition: background-color 0.1s ease;
   &:hover {
-    background-color: #FFFFFF;
-  }
+    background-color: ${props => props.disabled ? 'inherit' : '#FFFFFF'};
+    cursor: ${props => props.disabled ? 'inherit' : 'pointer'};
+  };
 `;
+
 const Plus = styled.img`
   height: 14px;
   width: 14px;
   padding-right: 4px;
 `;
 
-const Button = () => {
+const Button = ({onHandleClick, disabled}) => {
   return (
-    <AddCard><Plus src={plus}/>Add card</AddCard>
+    <AddCard onClick={onHandleClick} disabled={disabled}><Plus src={plus}/>Add card</AddCard>
   )
 }
 
