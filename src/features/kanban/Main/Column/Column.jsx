@@ -1,10 +1,12 @@
-import React, { useState, useEffect, useCallback } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
-import { createTask} from "./../../kanbanSlice";
+import { createTask, setColumn } from "./../../kanbanSlice";
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import ColumnInnerList from './ColumnInnerList';
-import Button from './../Button/Button';
+import Button from '../../Common/Button/Button';
+import DropdownMenu from '../../Common/DropdownMenu/DropdownMenu';
+import { reorder } from './../../utils';
 
 // styling
 const Container = styled.div`
@@ -12,7 +14,8 @@ const Container = styled.div`
   border: 1px solid lightgrey;
   border-radius: 2px;
   min-width: 282px;
-  height: 500px;
+  min-height: 200px;
+  max-height: 85%;
   background-color: #EBECF0;
   display: flex;
   flex-direction: column;
@@ -32,28 +35,46 @@ const TaskList = styled.div`
   // =====  rbdnd still not correctrly supports nested scrolling containers - so this should be tested ===== //
   overflow-y: auto;
 `;
+const RelativeContainer = styled.div`
+  position: relative;
+  display: inline-block;
+  height: 48px;
+  width: 100%;
+`;
 
-const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder }) => {
+const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, taskMap }) => {
   const dispatch = useDispatch();
+  const prevCol = columns[columnOrder[index - 1]];
+  const thisCol = columns[columnOrder[index]];
+
   // create new task in first column
   const createNewTask = () => dispatch(createTask());
-  // checks if previous (left) column is empty (and not first)
-  const isPreviousEmpty = useCallback(
-    () => {
-      if (index === 0) return false;
-      const previous = columns[columnOrder[index - 1]];
-      return previous.taskIds.length < 1;
-    }, [columns, columnOrder, index]);
-  // set disable state for add task buttin
-  const [addTaskDisabled, setAddTaskDisabled] = useState(isPreviousEmpty());
-  useEffect(() => { setAddTaskDisabled(isPreviousEmpty()) }, [isPreviousEmpty]);
-  // const disableAddTask = () => setAddTaskDisabled(true); 
 
+  // for disabling add task button
+  const isPreviousEmpty = index > 0 && prevCol.taskIds.length < 1;
+  const [addTaskDisabled, setAddTaskDisabled] = useState(isPreviousEmpty);
 
-  const addTask = () => {
-    console.log(index);
+  useEffect(() => { setAddTaskDisabled(isPreviousEmpty) }, [isPreviousEmpty]);
+
+  // for switching button to dropdown menu
+  const [isDropdown, setIsDropdown] = useState(false);
+  const showDropdown = () => setIsDropdown(true);
+  const hideDropdown = () => setIsDropdown(false);
+  
+  // getting and setting new tasklists for previous and this column after moving task
+  const addTask = taskId => {
+    const start = prevCol;
+    const finish = thisCol;
+    const sourceIndex = prevCol.taskIds.indexOf(taskId)
+    const destinationIndex = thisCol.taskIds.length;
+    const [startTasksIds, finishTaskIds] = reorder(sourceIndex, destinationIndex, taskId, start.taskIds, finish.taskIds);
+    dispatch(setColumn({ [start.id]: startTasksIds }));
+    dispatch(setColumn({ [finish.id]: finishTaskIds }));
+    hideDropdown();
   };
 
+  // mapping previous column tasks for dropdown menu
+  const dropDownTasks = index > 0 && prevCol.taskIds.map(taskId => taskMap[taskId]);
 
   return (
     // Draggable wrapper - makes everything  draggable
@@ -75,7 +96,11 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder }) 
               </TaskList>
             )}
           </Droppable>
-          <Button onHandleClick={index === 0 ? createNewTask : addTask} disabled={addTaskDisabled}/>
+          <RelativeContainer>
+            {isDropdown ?
+              <DropdownMenu tasks={dropDownTasks} addTask={addTask} onHandleLeave={hideDropdown}/>
+              : <Button onHandleClick={index === 0 ? createNewTask : showDropdown} disabled={addTaskDisabled} />}
+          </RelativeContainer>
         </Container>
       )}
     </Draggable>

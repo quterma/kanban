@@ -4,10 +4,10 @@ export const kanbanSlice = createSlice({
 	name: "kanban",
 	initialState: {
 		tasks: {
-			"task-1": { id: "task-1", content: "Task 1" },
-			"task-2": { id: "task-2", content: "Task 2" },
-			"task-3": { id: "task-3", content: "Task 3" },
-			"task-4": { id: "task-4", content: "Task 4" },
+			"task-1": { id: "task-1", content: "Task 111" },
+			"task-2": { id: "task-2", content: "Task 222" },
+			"task-3": { id: "task-3", content: "Task 333" },
+			"task-4": { id: "task-4", content: "Task 444" },
 		},
 		columns: {
 			"column-1": {
@@ -48,7 +48,7 @@ export const kanbanSlice = createSlice({
 		setColumn: (state, action) => {
 			const id = Object.keys(action.payload)[0];
 			const value = Object.values(action.payload)[0];
-			state.columns[id] = value;
+			state.columns[id].taskIds = value;
 		},
 		createTask: state => {
 			const id = `task-${Object.keys({ ...state.tasks }).length + 1}`;

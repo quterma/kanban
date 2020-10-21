@@ -11,7 +11,7 @@ import {
 } from "../kanbanSlice";
 import { reorder } from "../utils";
 import { DragDropContext } from "react-beautiful-dnd";
-import Main from "./Main/Main";
+import Main from "./Main";
 
 // Component with main drag-n-drop logic
 const MainDragDropContext = () => {
@@ -51,7 +51,7 @@ const MainDragDropContext = () => {
 			// =====  Columns moving logic starts here ======================================
 			if (type === "column") {
 				// Creating a new column order array
-				const newColumnOrder = reorder(source, destination, draggableId, [...columnOrder])[0];
+				const newColumnOrder = reorder(source.index, destination.index, draggableId, columnOrder)[0];
 				// Setting new columnOrder into state
 				dispatch(setColumnOrder(newColumnOrder));
 				return;
@@ -64,29 +64,24 @@ const MainDragDropContext = () => {
 			// =====  Tasks moving within same column logic starts here ======================================
 			if (start === finish) {
 				// Creating a new taskIds array
-				const newTaskIds = reorder(source, destination, draggableId, [...start.taskIds])[0];
-				// Creating a copy of start object with new taskIds
-				const newColumn = { ...start, taskIds: newTaskIds };
-				// Setting new column into state
-				dispatch(setColumn({ [newColumn.id]: newColumn }));
+				const newTaskIds = reorder(source.index, destination.index, draggableId, start.taskIds)[0];
+				// dispatch column id and taskIds
+				dispatch(setColumn({ [start.id]: newTaskIds }));
 				return;
 			}
 
 			// =====  Tasks moving from one column to another logic starts here ======================================
 			// Creating a new taskIds arrays
 			const [startTasksIds, finishTaskIds] = reorder(
-				source,
-				destination,
+				source.index, destination.index,
 				draggableId,
-				[...start.taskIds],
-				[...finish.taskIds]
+				start.taskIds,
+				finish.taskIds
 			);
-			// Creating copies of start and finish objects with new taskIds
-			const newStart = { ...start, taskIds: startTasksIds };
-			const newFinish = { ...finish, taskIds: finishTaskIds };
-			// Setting new columns into state
-			dispatch(setColumn({ [newStart.id]: newStart }));
-			dispatch(setColumn({ [newFinish.id]: newFinish }));
+
+			// dispatch column id and taskIds
+			dispatch(setColumn({ [start.id]: startTasksIds }));
+			dispatch(setColumn({ [finish.id]: finishTaskIds }));
 		},
 		// dependencies
 		[columnOrder, columns, dispatch]
