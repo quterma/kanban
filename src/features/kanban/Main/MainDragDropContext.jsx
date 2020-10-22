@@ -9,7 +9,7 @@ import {
 	selectColumns,
 	selectTasks,
 } from "../kanbanSlice";
-import { reorder } from "../utils";
+import { reorder } from "./../Common/utils";
 import { DragDropContext } from "react-beautiful-dnd";
 import Main from "./Main";
 

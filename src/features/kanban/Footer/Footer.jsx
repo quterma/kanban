@@ -4,7 +4,7 @@ import { selectColumnOrder,	selectColumns } from "./../kanbanSlice";
 import styled from 'styled-components';
 
 // styling
-const Container = styled.div`
+const Container = styled.footer`
   height: 55px;
   background: #0067A3;
   position: relative;
@@ -25,8 +25,8 @@ const date = '01.01.2020';
 const Footer = () => {
   const columnOrder = useSelector(selectColumnOrder);
   const columns = useSelector(selectColumns);
-  const activeCount = columns[columnOrder[0]].taskIds.length;
-  const finishedCount = columns[columnOrder[columnOrder.length - 1]].taskIds.length;
+  const activeCount = columnOrder.length === 0 ? 0 : columns[columnOrder[0]].taskIds.length;
+  const finishedCount = columnOrder.length === 0 ? 0 : columns[columnOrder[columnOrder.length - 1]].taskIds.length;
 
   return (
     <Container>

@@ -55,10 +55,16 @@ export const kanbanSlice = createSlice({
 			state.tasks[id] = { id, content: "new task" };
 			state.columns[state.columnOrder[0]].taskIds.push(id);
 		},
+		createColumn: state => {
+			const totalColumns = Object.keys({ ...state.columns }).length;
+			const id = `column-${totalColumns > 0 ? totalColumns + 1 : 0}`;
+			state.columns[id] = { id, title: "new list", taskIds: [] };
+			state.columnOrder.splice(1, 0, id);
+		},
 	},
 });
 
-export const { setHomeIndex, setColumnOrder, setColumn, createTask } = kanbanSlice.actions;
+export const { setHomeIndex, setColumnOrder, setColumn, createTask, createColumn } = kanbanSlice.actions;
 
 // Selectors
 export const selectHomeIndex = state => state.kanban.homeIndex && Object.values(state.kanban.homeIndex)[0];

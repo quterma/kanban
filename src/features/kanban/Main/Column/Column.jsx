@@ -6,16 +6,14 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import ColumnInnerList from './ColumnInnerList';
 import Button from '../../Common/Button/Button';
 import DropdownMenu from '../../Common/DropdownMenu/DropdownMenu';
-import { reorder } from './../../utils';
+import { reorder } from '../../Common/utils';
 
 // styling
 const Container = styled.div`
-  margin: 8px;
   border: 1px solid lightgrey;
   border-radius: 2px;
   min-width: 282px;
-  min-height: 200px;
-  max-height: 85%;
+  max-height: 95%;
   background-color: #EBECF0;
   display: flex;
   flex-direction: column;
@@ -28,8 +26,9 @@ const Title = styled.h3`
 `;
 const TaskList = styled.div`
   padding: 12px;
+  align-self: stretch;
   flex-grow: 1;
-  min-height: 150px;
+  min-height: 140px;
   transition: background-color 0.1s ease;
   background-color: ${props => props.isDraggingOver ? '#add8e6c4' : 'inherit'};
   // =====  rbdnd still not correctrly supports nested scrolling containers - so this should be tested ===== //
@@ -40,6 +39,10 @@ const RelativeContainer = styled.div`
   display: inline-block;
   height: 48px;
   width: 100%;
+`;
+const Wrapper = styled.div`
+  padding: 0 20px;
+  height: 100%;
 `;
 
 const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, taskMap }) => {
@@ -62,12 +65,13 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
   const hideDropdown = () => setIsDropdown(false);
   
   // getting and setting new tasklists for previous and this column after moving task
-  const addTask = taskId => {
+  const addTask = data => {
+    const id = data.id;
     const start = prevCol;
     const finish = thisCol;
-    const sourceIndex = prevCol.taskIds.indexOf(taskId)
+    const sourceIndex = prevCol.taskIds.indexOf(id)
     const destinationIndex = thisCol.taskIds.length;
-    const [startTasksIds, finishTaskIds] = reorder(sourceIndex, destinationIndex, taskId, start.taskIds, finish.taskIds);
+    const [startTasksIds, finishTaskIds] = reorder(sourceIndex, destinationIndex, id, start.taskIds, finish.taskIds);
     dispatch(setColumn({ [start.id]: startTasksIds }));
     dispatch(setColumn({ [finish.id]: finishTaskIds }));
     hideDropdown();
@@ -77,14 +81,15 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
   const dropDownTasks = index > 0 && prevCol.taskIds.map(taskId => taskMap[taskId]);
 
   return (
-    // Draggable wrapper - makes everything  draggable
+    <Wrapper>
+    {/* Draggable wrapper - makes everything  draggable */}
     <Draggable draggableId={column.id} index={index}>
       {(provided) => (
         <Container ref={provided.innerRef} {...provided.draggableProps}>
           {/* Title here has draghandling props which makes this element to be a draghandler */}
           <Title {...provided.dragHandleProps}>{column.title}</Title>
           {/* wrapper for droppable element */}
-          <Droppable droppableId={column.id} isDropDisabled={isDropDisabled} type='task'>
+          <Droppable droppableId={column.id} isDropDisabled={isDropDisabled} type='task' top='100px'>
             {(provided, snapshot) => (
               <TaskList
               ref={provided.innerRef}
@@ -98,12 +103,18 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
           </Droppable>
           <RelativeContainer>
             {isDropdown ?
-              <DropdownMenu tasks={dropDownTasks} addTask={addTask} onHandleLeave={hideDropdown}/>
-              : <Button onHandleClick={index === 0 ? createNewTask : showDropdown} disabled={addTaskDisabled} />}
+              <DropdownMenu mappingData={dropDownTasks} onSubmit={addTask} onHandleLeave={hideDropdown} align='center' top='-100px'/>
+              : <Button
+                onHandleClick={index === 0 ? createNewTask : showDropdown}
+                disabled={addTaskDisabled}
+                name={index === 0 ? 'Create new task' : 'Add task'}
+              />
+            }
           </RelativeContainer>
         </Container>
       )}
-    </Draggable>
+      </Draggable>
+      </Wrapper>
   )
 }
 

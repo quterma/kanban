@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import OutsideDetecter from '../outsideDetector';
 
 const Container = styled.ul`
   position: absolute;
@@ -7,8 +8,10 @@ const Container = styled.ul`
   min-width: 258px;
   min-height: 70px;
   max-height: 170px;
-  left: 50%;
-  transform: translateX(-50%);
+  right: ${props => props.align};
+  transform: translateX(${props => props.align});
+  top: ${props => props.top};
+
   border-radius: 5px;
   box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
   z-index: 10;
@@ -26,17 +29,25 @@ const Unit = styled.li`
   &:hover { background-color: #DEDEDE }
 `;
 
-const DropdownMenu = ({ addTask, onHandleLeave, tasks }) => {
+const DropdownMenu = ({ onSubmit, onHandleLeave, mappingData, align, top }) => {
 
   const onHandleClick = (event) => {
-    addTask(event.currentTarget.id);
+    onSubmit(event.currentTarget);
   }
 
-  const InnerList = tasks.map(task => <Unit key={task.id} id={task.id} onClick={onHandleClick}>{task.content}</Unit>);
+  const location = {
+    right: '1%',
+    center: '50%'
+    }
+
+  const InnerList = mappingData.map(el => <Unit key={el.id} id={el.id} onClick={onHandleClick}>{el.content}</Unit>);
   return (
-    <Container autoFocus={true} onMouseLeave={onHandleLeave}>
-      {InnerList}
-    </Container>
+    
+    <Container onMouseLeave={onHandleLeave} align={location[align]} top={top}>
+      <OutsideDetecter onHandleOutsideClicks={onHandleLeave}>
+        {InnerList}
+      </OutsideDetecter>
+      </Container>
   )
 }
 

@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import ava from './../../../assets/images/ava.svg';
-import arrow from './../../../assets/images/arrow.svg';
+import ava from './../../../../assets/images/ava.svg';
+import arrow from './../../../../assets/images/arrow.svg';
 
 // styling
 const Container = styled.div`
@@ -11,6 +11,9 @@ const Container = styled.div`
   position: absolute;
   top: ${props => props.top};
   right: ${props => props.right};
+  cursor: pointer;
+  transition: 0.2s ease;
+  &:hover { opacity: 0.8 }
 `;
 const Frame = styled.div`
   width: 40px;
@@ -33,13 +36,13 @@ const Arrow = styled.img`
   margin-left: 8px;
 `;
 
-const UserMenu = ({ top,right }) => {
+const UserMenu = ({ top, right, onHandleClick, open }) => {
   return (
-    <Container top={top} right={right}>
+    <Container top={top} right={right} onClick={onHandleClick}>
       <Frame>
         <Avatar src={ava} alt='avatar'/>
       </Frame>
-      <Arrow src={arrow} alt='arrow'/>
+      <Arrow src={arrow} alt='arrow' open={open}/>
     </Container>
   )
 }
