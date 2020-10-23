@@ -1,0 +1,13 @@
+.textareaWrapper,
+.inputWrapper {
+	margin: 10px;
+}
+
+.textareaError,
+.inputError {
+	border: 1px solid red;
+}
+
+.textError {
+	color: red;
+}

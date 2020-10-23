@@ -48,7 +48,7 @@ function Header() {
         light
       />
       <UserMenu top='8px' right='22px' onHandleClick={showDropdown} open={isDropdown}/>
-      {isDropdown && <DropdownMenu mappingData={dropDownItems} onSubmit={onDropdownSubmit} onHandleLeave={hideDropdown} align='right' top='50px'/>}
+      {isDropdown && <DropdownMenu mappingData={dropDownItems} onSubmit={onDropdownSubmit} onHandleLeave={hideDropdown} right='1%' top='50px'/>}
     </Container>
   )
 }

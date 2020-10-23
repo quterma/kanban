@@ -1,8 +1,10 @@
 import React from "react";
 import styled, { createGlobalStyle } from "styled-components";
+import { Route, Switch, withRouter } from "react-router-dom";
 import Header from "./features/kanban/Header/Header";
 import MainDragDropContext from "./features/kanban/Main/MainDragDropContext";
 import Footer from "./features/kanban/Footer/Footer";
+import TaskEditor from "./features/kanban/Main/TaskEditor/TaskEditor";
 
 // styling
 const GlobalStyle = createGlobalStyle`
@@ -41,11 +43,14 @@ const App = () => {
 			<GlobalStyle />
 			<Wrapper>
 				<Header />
-				<MainDragDropContext />
+				<Switch>
+					<Route path="/editor" render={() => <TaskEditor />} />
+					<Route path="/" render={() => <MainDragDropContext />} />
+				</Switch>
 				<Footer />
 			</Wrapper>
 		</>
 	);
 };
 
-export default App;
+export default withRouter(App);

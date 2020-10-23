@@ -1,5 +1,5 @@
 import React, { useRef, useEffect } from "react";
-import PropTypes from "prop-types";
+// import PropTypes from "prop-types";
 
 // Hook that call onHandleOutsideClicks outside of the passed ref
 function useOutsideDetector(ref, onHandleOutsideClicks) {
@@ -20,14 +20,14 @@ function useOutsideDetector(ref, onHandleOutsideClicks) {
 }
 
 //Component that alerts if you click outside of it
-function OutsideDetecter(props) {
+function OutsideDetector(props) {
 	const wrapperRef = useRef(null);
 	useOutsideDetector(wrapperRef, props.onHandleOutsideClicks);
 	return <div ref={wrapperRef}>{props.children}</div>;
 }
 
-OutsideDetecter.propTypes = {
-	children: PropTypes.element.isRequired,
-};
+// OutsideDetector.propTypes = {
+// 	children: PropTypes.element.isRequired,
+// };
 
-export default OutsideDetecter;
+export default OutsideDetector;

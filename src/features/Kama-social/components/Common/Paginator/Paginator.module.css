@@ -1,0 +1,23 @@
+.pageSelectorsContainer {
+	color: blue;
+	width: 500px;
+	height: 30px;
+	border: 1px solid blue;
+	display: flex;
+	justify-content: space-evenly;
+	margin: 10px;
+}
+.selectedPage {
+	font-weight: bold;
+	color: red;
+}
+.span {
+	border: 1px solid green;
+	width: 40px;
+	text-align: center;
+	line-height: 26px;
+	cursor: pointer;
+}
+.button {
+	cursor: pointer;
+}

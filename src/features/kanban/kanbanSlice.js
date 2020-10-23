@@ -52,19 +52,49 @@ export const kanbanSlice = createSlice({
 		},
 		createTask: state => {
 			const id = `task-${Object.keys({ ...state.tasks }).length + 1}`;
-			state.tasks[id] = { id, content: "new task" };
+			state.tasks[id] = { id, content: "" };
 			state.columns[state.columnOrder[0]].taskIds.push(id);
 		},
 		createColumn: state => {
 			const totalColumns = Object.keys({ ...state.columns }).length;
 			const id = `column-${totalColumns > 0 ? totalColumns + 1 : 0}`;
-			state.columns[id] = { id, title: "new list", taskIds: [] };
+			state.columns[id] = { id, title: "", taskIds: [] };
 			state.columnOrder.splice(1, 0, id);
+		},
+		deleteColumn: (state, action) => {
+			const columnId = action.payload;
+			const taskIds = state.columns[columnId].taskIds;
+			if (state.columnOrder.indexOf(columnId) === 0) {
+				taskIds.forEach(task => delete state.tasks[task]);
+			} else {
+				state.columns[columnId].taskIds.forEach(task => state.columns[state.columnOrder[0]].taskIds.push(task));
+			}
+			delete state.columns[columnId];
+			state.columnOrder.splice(state.columnOrder.indexOf(columnId), 1);
+		},
+		setColumnTitle: (state, action) => {
+			const columnId = action.payload.id;
+			const newTitle = action.payload.newTitle;
+			state.columns[columnId].title = newTitle;
+		},
+		setTaskTitle: (state, action) => {
+			const taskId = action.payload.id;
+			const newTitle = action.payload.newTitle;
+			state.tasks[taskId].content = newTitle;
 		},
 	},
 });
 
-export const { setHomeIndex, setColumnOrder, setColumn, createTask, createColumn } = kanbanSlice.actions;
+export const {
+	setHomeIndex,
+	setColumnOrder,
+	setColumn,
+	createTask,
+	createColumn,
+	deleteColumn,
+	setColumnTitle,
+	setTaskTitle,
+} = kanbanSlice.actions;
 
 // Selectors
 export const selectHomeIndex = state => state.kanban.homeIndex && Object.values(state.kanban.homeIndex)[0];

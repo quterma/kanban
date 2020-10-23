@@ -7,9 +7,8 @@ const AddItem = styled.button`
   border-radius: 5px;
   border: none;
   outline: none;
-  margin: 7px 11px;
   font-size: 18px;
-  transition: 0.3s ease;
+  transition: 0.2s ease;
   color: ${props => props.light ? '#FFFFFF' : '#5E6C84'};
   padding: 6px;
   &:hover {
@@ -17,15 +16,17 @@ const AddItem = styled.button`
     cursor: ${props => props.disabled ? 'inherit' : 'pointer'};
     color: #5E6C84;
   };
+  margin: 7px 11px;
+  margin-top: ${props => props.top && props.top};
 `;
 const Icon = styled.i`
   margin-right: 4px;
 `;
 
-const Button = ({ onHandleClick, disabled, name, light }) => {
+const Button = ({ onHandleClick, disabled, name, light, clear, top }) => {
   return (
-    <AddItem onClick={onHandleClick} disabled={disabled} light={light}>
-      <Icon className="fas fa-plus" light={light}></Icon>
+    <AddItem onClick={onHandleClick} disabled={disabled} light={light} top={top}>
+      {!clear && <Icon className="fas fa-plus" light={light}></Icon>}
       {name}
     </AddItem>
   )

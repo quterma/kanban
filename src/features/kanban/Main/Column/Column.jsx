@@ -6,43 +6,46 @@ import { Droppable, Draggable } from 'react-beautiful-dnd';
 import ColumnInnerList from './ColumnInnerList';
 import Button from '../../Common/Button/Button';
 import DropdownMenu from '../../Common/DropdownMenu/DropdownMenu';
-import { reorder } from '../../Common/utils';
+import { reorder } from './../../Common/utils';
+import ColumnHeader from './ColumnHeader';
 
 // styling
 const Container = styled.div`
   border: 1px solid lightgrey;
-  border-radius: 2px;
   min-width: 282px;
   max-height: 95%;
   background-color: #EBECF0;
   display: flex;
   flex-direction: column;
   border-radius: 10px;
-`;
-const Title = styled.h3`
-  padding: 12px;
-  font-size: 18px;
-  height: 36px;
+  text-align: left;
 `;
 const TaskList = styled.div`
   padding: 12px;
   align-self: stretch;
   flex-grow: 1;
   min-height: 140px;
+  max-width: 280px;
   transition: background-color 0.1s ease;
   background-color: ${props => props.isDraggingOver ? '#add8e6c4' : 'inherit'};
-  // =====  rbdnd still not correctrly supports nested scrolling containers - so this should be tested ===== //
   overflow-y: auto;
 `;
 const RelativeContainer = styled.div`
   position: relative;
-  display: inline-block;
   height: 48px;
   width: 100%;
 `;
 const Wrapper = styled.div`
   padding: 0 20px;
   height: 100%;
+`;
+const ColumnHeaderContainer = styled.div`
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  height: 44px;
+  width: 100%;
+  outline: none;
 `;
 
 const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, taskMap }) => {
@@ -61,8 +64,6 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
 
   // for switching button to dropdown menu
   const [isDropdown, setIsDropdown] = useState(false);
-  const showDropdown = () => setIsDropdown(true);
-  const hideDropdown = () => setIsDropdown(false);
   
   // getting and setting new tasklists for previous and this column after moving task
   const addTask = data => {
@@ -74,12 +75,11 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
     const [startTasksIds, finishTaskIds] = reorder(sourceIndex, destinationIndex, id, start.taskIds, finish.taskIds);
     dispatch(setColumn({ [start.id]: startTasksIds }));
     dispatch(setColumn({ [finish.id]: finishTaskIds }));
-    hideDropdown();
+    setIsDropdown(false);
   };
 
   // mapping previous column tasks for dropdown menu
   const dropDownTasks = index > 0 && prevCol.taskIds.map(taskId => taskMap[taskId]);
-
   return (
     <Wrapper>
     {/* Draggable wrapper - makes everything  draggable */}
@@ -87,7 +87,12 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
       {(provided) => (
         <Container ref={provided.innerRef} {...provided.draggableProps}>
           {/* Title here has draghandling props which makes this element to be a draghandler */}
-          <Title {...provided.dragHandleProps}>{column.title}</Title>
+          <ColumnHeaderContainer {...provided.dragHandleProps}>
+            <ColumnHeader
+                title={column.title}
+                thisColId={columnOrder[index]}
+            />
+          </ColumnHeaderContainer>
           {/* wrapper for droppable element */}
           <Droppable droppableId={column.id} isDropDisabled={isDropDisabled} type='task' top='100px'>
             {(provided, snapshot) => (
@@ -103,9 +108,9 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
           </Droppable>
           <RelativeContainer>
             {isDropdown ?
-              <DropdownMenu mappingData={dropDownTasks} onSubmit={addTask} onHandleLeave={hideDropdown} align='center' top='-100px'/>
+                <DropdownMenu mappingData={dropDownTasks} onSubmit={addTask} onHandleLeave={() => setIsDropdown(false)} right='50%' top='-100px'/>
               : <Button
-                onHandleClick={index === 0 ? createNewTask : showDropdown}
+                onHandleClick={index === 0 ? createNewTask : () => setIsDropdown(true)}
                 disabled={addTaskDisabled}
                 name={index === 0 ? 'Create new task' : 'Add task'}
               />

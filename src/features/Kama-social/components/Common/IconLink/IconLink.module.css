@@ -1,0 +1,10 @@
+.icon {
+	color: rgb(34, 100, 175, 0.6);
+	font-size: 20px;
+	transition: 0.2s;
+	margin: 0 5px;
+}
+
+.icon:hover {
+	color: rgb(34, 100, 175);
+}

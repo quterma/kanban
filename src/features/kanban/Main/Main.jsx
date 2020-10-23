@@ -14,14 +14,11 @@ const Container = styled.main`
   height: 100%;
   padding: 20px 0;
 `;
-
 const Wrapper = styled.div`
   overflow-x: auto;
   background-color: #0079BF;
   height: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+  text-align: center;
 `;
 
 const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
@@ -29,9 +26,11 @@ const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
   const ref = useRef(null);
   const [scroll, setScroll] = useState(false);
   useEffect(() => {
-    const containerWidth = ref.current.getBoundingClientRect().width;
-    const scrollWidth = ref.current.scrollWidth;
-    const isOverflow = containerWidth < scrollWidth;
+    if (!ref.current) {
+      setScroll(false);
+      return;
+    }
+    const isOverflow = ref.current.getBoundingClientRect().width < ref.current.scrollWidth;
     setScroll(isOverflow);
   }, [columnOrder.length]);
 
@@ -47,7 +46,7 @@ const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
   return (
     // wrapper for droppable element ref={provided.innerRef}
     <Wrapper ref={ref}>
-      {isEmpty ? <Button onHandleClick={createNewColumn} name='Create new list' light/> :
+      {isEmpty ? <Button onHandleClick={createNewColumn} name='Create new list' light top={'40vh'}/> :
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
           {provided => (
             <Container ref={provided.innerRef} {...provided.droppableProps} scroll={scroll}>
