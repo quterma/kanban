@@ -34,17 +34,17 @@ const ColumnHeader = ({ title, thisColId }) => {
   // data for dropdownMenu mapping
   const mappingData = [{ id: 'delete column', content: 'Delete Column' }, { id: 'rename column', content: 'Rename column' }];
   // state for toggling Button('...') | Dropdown('delete column', 'rename column')
-  const [isDropdown, setisDropdown] = useState(false);
+  const [isDropdown, setIsDropdown] = useState(false);
   //get data from dropdownMenu and choose action
   const execDropdownCommand = data => {
     switch (data.id) {
       case 'delete column':
         dispatch(deleteColumn(thisColId));
-        setisDropdown(false);
+        setIsDropdown(false);
         break;
       case 'rename column':
         activateEditMode();
-        setisDropdown(false);
+        setIsDropdown(false);
         break;
       default: return;
     }
@@ -60,11 +60,11 @@ const ColumnHeader = ({ title, thisColId }) => {
           <DropdownMenu
             mappingData={mappingData}
             onSubmit={execDropdownCommand}
-            onHandleLeave={() => setisDropdown(false)}
+            onHandleLeave={() => setIsDropdown(false)}
             right='-4%' top='15px' />
         </RelativeContainer>
         : <Button
-          onHandleClick={() => setisDropdown(true)}
+          onHandleClick={() => setIsDropdown(true)}
           name={'. . .'}
           clear
         />

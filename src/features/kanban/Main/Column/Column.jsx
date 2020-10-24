@@ -101,7 +101,7 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
               {...provided.droppableProps}
               isDraggingOver={snapshot.isDraggingOver}
               >
-                <ColumnInnerList tasks={tasks}/>
+                <ColumnInnerList tasks={tasks} thisColId={columnOrder[index]}/>
                 {provided.placeholder}
               </TaskList>
             )}

@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
+import { withRouter, useLocation } from "react-router-dom";
 import styled from 'styled-components';
 import Button from '../Common/Button/Button';
 import UserMenu from '../Common/UserMenu/UserMenu';
@@ -24,6 +25,7 @@ const Title = styled.h2`
 `;
 
 function Header() {
+  const isEditor = useLocation().pathname.startsWith('/editor');
   // for switching button to dropdown menu
   const [isDropdown, setIsDropdown] = useState(false);
   const showDropdown = () => setIsDropdown(true);
@@ -42,15 +44,17 @@ function Header() {
   return (
     <Container>
       <Title>Awesome Kanban Board</Title>
-      <Button
-        onHandleClick={createNewColumn}
-        name='Create new list'
-        light
-      />
+      {isEditor ||
+        <Button
+          onHandleClick={createNewColumn}
+          name='Create new list'
+          light
+        />
+      }
       <UserMenu top='8px' right='22px' onHandleClick={showDropdown} open={isDropdown}/>
       {isDropdown && <DropdownMenu mappingData={dropDownItems} onSubmit={onDropdownSubmit} onHandleLeave={hideDropdown} right='1%' top='50px'/>}
     </Container>
   )
 }
 
-export default Header
+export default withRouter(Header);

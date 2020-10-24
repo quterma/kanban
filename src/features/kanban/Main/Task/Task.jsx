@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux';
@@ -20,11 +21,10 @@ const Input = styled.input`
   width: 100%;
 `;
 
-const Task = ({ task, index }) => {
+const Task = ({ task, index, thisColId }) => {
   const dispatch = useDispatch();
   // editMode state for setting new column title
   const [editMode, setEditMode] = useState(task.content === '');
-  const activateEditMode = () => setEditMode(true);
   // title state for title inpute onChange subscribe and setting value
   const [newTitle, setNewTitle] = useState(task.content);
   const onHandleChange = (e) => setNewTitle(e.currentTarget.value);
@@ -33,6 +33,10 @@ const Task = ({ task, index }) => {
     dispatch(setTaskTitle({ newTitle: newTitle ? newTitle : 'New Task', id: task.id }));
     setEditMode(false);
   }
+
+  let history = useHistory();
+  const handleDoubleClick = () => history.push(`/editor/${thisColId}/${task.id}`);
+  console.log('render');
   return (
     // Draggable element
     <Draggable draggableId={task.id} index={index} >
@@ -42,7 +46,7 @@ const Task = ({ task, index }) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
-          onDoubleClick={activateEditMode}
+          onDoubleClick={handleDoubleClick}
         >
         { editMode ?
           <Input
