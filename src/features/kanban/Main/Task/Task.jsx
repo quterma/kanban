@@ -11,14 +11,16 @@ const Container = styled.div`
   width: 100%;
   padding: 4px 8px;
   min-height: 34px;
-  line-height: 26px;
   margin: 0 auto 15px auto;
-  font-size: 18px;
   background-color: ${props => props.isDragging ? '#9ae455' : 'white'};
   outline: none;
 `;
 const Input = styled.input`
   width: 100%;
+`;
+const Title = styled.h3`
+  line-height: 26px;
+  font-size: 18px;
 `;
 
 const Task = ({ task, index, thisColId }) => {
@@ -46,7 +48,6 @@ const Task = ({ task, index, thisColId }) => {
           {...provided.dragHandleProps}
           ref={provided.innerRef}
           isDragging={snapshot.isDragging}
-          onDoubleClick={handleDoubleClick}
         >
         { editMode ?
           <Input
@@ -55,7 +56,7 @@ const Task = ({ task, index, thisColId }) => {
             value={newTitle}
             name={task.content}
           />
-          : task.content
+            : <Title onDoubleClick={handleDoubleClick}>{task.content}</Title>
         }
         </Container>
       )}

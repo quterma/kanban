@@ -19,8 +19,9 @@ const Info = styled.div`
   float: ${props => props.float};
 `;
 
-const userName = 'NAME';
-const date = '01.01.2020';
+// заглушка =====
+const userName = 'NAME'; 
+const date = new Date().toISOString().split('T')[0].replace(/-/g, '.');
 
 const Footer = () => {
   const columnOrder = useSelector(selectColumnOrder);
