@@ -44,7 +44,7 @@ const App = () => {
 			<Wrapper>
 				<Header />
 				<Switch>
-					<Route path="/editor/:columnId?/:taskId?" render={() => <TaskEditor />} />
+					<Route path="/editor/:taskId?" render={() => <TaskEditor />} />
 					<Route path="/" render={() => <MainDragDropContext />} />
 				</Switch>
 				<Footer />

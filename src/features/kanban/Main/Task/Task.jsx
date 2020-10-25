@@ -23,7 +23,7 @@ const Title = styled.h3`
   font-size: 18px;
 `;
 
-const Task = ({ task, index, thisColId }) => {
+const Task = ({ task, index }) => {
   const dispatch = useDispatch();
   // editMode state for setting new column title
   const [editMode, setEditMode] = useState(task.content === '');
@@ -37,7 +37,7 @@ const Task = ({ task, index, thisColId }) => {
   }
 
   let history = useHistory();
-  const handleDoubleClick = () => history.push(`/editor/${thisColId}/${task.id}`);
+  const handleDoubleClick = () => history.push(`/editor/${task.id}`);
   console.log('render');
   return (
     // Draggable element

@@ -54,7 +54,10 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
   const thisCol = columns[columnOrder[index]];
 
   // create new task in first column
-  const createNewTask = () => dispatch(createTask());
+  const createNewTask = () => {
+    const created = new Date().toISOString().split('.')[0].replace(/-/g, '.').replace(/t/gi, ' at ');
+    dispatch(createTask(created));
+  }
 
   // for disabling add task button
   const isPreviousEmpty = index > 0 && prevCol.taskIds.length < 1;
@@ -101,7 +104,7 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
               {...provided.droppableProps}
               isDraggingOver={snapshot.isDraggingOver}
               >
-                <ColumnInnerList tasks={tasks} thisColId={columnOrder[index]}/>
+                <ColumnInnerList tasks={tasks} />
                 {provided.placeholder}
               </TaskList>
             )}
