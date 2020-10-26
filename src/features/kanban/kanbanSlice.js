@@ -1,4 +1,5 @@
 import { createSlice } from "@reduxjs/toolkit";
+import { v4 } from "node-uuid";
 
 export const kanbanSlice = createSlice({
 	name: "kanban",
@@ -68,13 +69,12 @@ export const kanbanSlice = createSlice({
 		},
 		createTask: (state, action) => {
 			const created = action.payload;
-			const id = `task-${Object.keys({ ...state.tasks }).length + 1}`;
+			const id = v4();
 			state.tasks[id] = { id, content: "", steps: [], created };
 			state.columns[state.columnOrder[0]].taskIds.push(id);
 		},
 		createColumn: state => {
-			const totalColumns = Object.keys({ ...state.columns }).length;
-			const id = `column-${totalColumns > 0 ? totalColumns + 1 : 0}`;
+			const id = v4();
 			state.columns[id] = { id, title: "", taskIds: [] };
 			state.columnOrder.splice(1, 0, id);
 		},
@@ -102,7 +102,7 @@ export const kanbanSlice = createSlice({
 		createTaskStep: (state, action) => {
 			// expected taskid - string
 			const taskId = action.payload;
-			const id = `${taskId}-step-${state.tasks[taskId].steps.length + 1}`;
+			const id = v4();
 			const newStep = { id, content: "", isCompleted: false };
 			state.tasks[taskId].steps.push(newStep);
 		},

@@ -26,7 +26,7 @@ const Container = styled.div`
   height: 100%;
   background-color: #EBECF0;
   border-radius: 10px;
-  text-align: center;
+  text-align: left;
 `;
 const Header = styled.div`
   display: flex;
@@ -35,6 +35,7 @@ const Header = styled.div`
   padding: 20px 5%;
 `;
 const Title = styled.h3``;
+const Created = styled.h4``;
 const Input = styled.input`
   width: 400px;
   line-height: 32px;
@@ -42,14 +43,19 @@ const Input = styled.input`
 `;
 const Editarea = styled.div`
   width: 90%;
-  height: 70%;
+  height: 75%;
   margin: 20px auto;
-  padding: 20px;
+  padding: 40px;
   font-size: 22px;
   display: block;
   border: 1px solid grey;
   border-radius: 5px;
   background-color: white;
+  overflow-y: auto;
+`;
+const Buttons = styled.div`
+  border: 1px solid grey;
+  border-radius: 5px;
 `;
 
 const withThisTaskRedirectHOC = Component => {
@@ -96,10 +102,15 @@ const TaskEditor = () => {
       <Container>
         <Header>
           {editMode ? <Input autoFocus onBlur={updateTaskTitle} onChange={onInputHandleChange} value={newTitle} name='title' />
-            : <Title onDoubleClick={activateEditMode}>Task: {title}.  Created {created}</Title>
+            : <div>
+                <Title onDoubleClick={activateEditMode}>{title}</Title>
+              {created && <Created>{created}</Created>}
+              </div>
           }
-          <Button onHandleClick={addStep} name='Add step' clear />
-          <Button onHandleClick={closeEdit} name='Close edit' clear />
+          <Buttons>
+            <Button onHandleClick={addStep} name='Add step' clear />
+            <Button onHandleClick={closeEdit} name='Close edit' clear />
+          </Buttons>
         </Header>
         <Editarea>
           <TaskStepsInnerList steps={steps} thisTaskId={thisTaskId}/>
