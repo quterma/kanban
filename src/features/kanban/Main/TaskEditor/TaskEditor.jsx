@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams, useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import Button from '../../Common/Button/Button';
-import {createTaskStep, selectTasks, setTaskTitle} from './../../kanbanSlice'
+import {createStep, selectTasks, setTaskTitle} from './../../kanbanSlice'
 import TaskStepsInnerList from './TaskStepsInnerList';
 import { Redirect } from "react-router-dom";
 
@@ -74,12 +74,11 @@ const TaskEditor = () => {
   const params = useParams();
   const tasks = useSelector(selectTasks);
 
-  const thisTask = tasks[params.taskId];
-  const thisTaskId = thisTask.id;
-  const title = thisTask.content;
-  const steps = thisTask.steps;
-  const created = thisTask.created;
-
+  const task = tasks[params.taskId];
+  const taskId = task.id;
+  const title = task.content;
+  const stepIds = task.steps;
+  const created = task.created;
   // editMode state for setting new column title
   const [editMode, setEditMode] = useState(false);
   const activateEditMode = () => setEditMode(true);
@@ -88,11 +87,11 @@ const TaskEditor = () => {
   const [newTitle, setNewTitle] = useState(title);
   const onInputHandleChange = (e) => setNewTitle(e.currentTarget.value)
   const updateTaskTitle = () => {
-    dispatch(setTaskTitle({ newTitle: newTitle ? newTitle : 'New Task', id: thisTaskId }));
+    dispatch(setTaskTitle({ newTitle: newTitle ? newTitle : 'New Task', id: taskId }));
     setEditMode(false);
   }
 
-  const addStep = () => dispatch(createTaskStep(thisTaskId));
+  const createNewStep = () => dispatch(createStep(taskId));
 
   let history = useHistory();
   const closeEdit = () => history.push('/');
@@ -108,12 +107,12 @@ const TaskEditor = () => {
               </div>
           }
           <Buttons>
-            <Button onHandleClick={addStep} name='Add step' clear />
+            <Button onHandleClick={createNewStep} name='Add step' clear />
             <Button onHandleClick={closeEdit} name='Close edit' clear />
           </Buttons>
         </Header>
         <Editarea>
-          <TaskStepsInnerList steps={steps} thisTaskId={thisTaskId}/>
+          <TaskStepsInnerList stepIds={stepIds} taskId={taskId} />
         </Editarea>
       </Container>
     </Wrapper>

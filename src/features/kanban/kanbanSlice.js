@@ -4,27 +4,22 @@ import { v4 } from "node-uuid";
 export const kanbanSlice = createSlice({
 	name: "kanban",
 	initialState: {
+		steps: {
+			// 'stepId': {id: stepId (string), content: string, isCompleted: boolean}
+		},
 		tasks: {
 			"task-1": {
 				id: "task-1",
-				content: "Move this task from 'backlog' to 'finished' (1 column per 1 movement",
-				steps: [
-					{ id: "task-1-step-1", content: "move from 'backlog' to 'ready'", isCompleted: false },
-					{ id: "task-1-step-2", content: "move from 'ready' to 'in progress'", isCompleted: false },
-					{ id: "task-1-step-3", content: "move from to 'in progress' to 'finished'", isCompleted: false },
-				],
+				content: "One",
+				steps: [],
 			},
 			"task-2": {
 				id: "task-2",
-				content: "double click on me and investigate",
-				steps: [
-					{ id: "task-2-step-1", content: "rename task", isCompleted: false },
-					{ id: "task-2-step-2", content: "add new step", isCompleted: false },
-					{ id: "task-2-step-3", content: "update step", isCompleted: false },
-				],
+				content: "Two",
+				steps: [],
 			},
-			"task-3": { id: "task-3", content: "Task 333", steps: [] },
-			"task-4": { id: "task-4", content: "Task 444", steps: [] },
+			"task-3": { id: "task-3", content: "Three", steps: [] },
+			"task-4": { id: "task-4", content: "Four", steps: [] },
 		},
 		columns: {
 			"column-1": {
@@ -62,21 +57,16 @@ export const kanbanSlice = createSlice({
 		setColumnOrder: (state, action) => {
 			state.columnOrder = action.payload;
 		},
-		setColumn: (state, action) => {
-			const id = Object.keys(action.payload)[0];
-			const value = Object.values(action.payload)[0];
-			state.columns[id].taskIds = value;
-		},
-		createTask: (state, action) => {
-			const created = action.payload;
-			const id = v4();
-			state.tasks[id] = { id, content: "", steps: [], created };
-			state.columns[state.columnOrder[0]].taskIds.push(id);
-		},
+
 		createColumn: state => {
 			const id = v4();
 			state.columns[id] = { id, title: "", taskIds: [] };
 			state.columnOrder.splice(1, 0, id);
+		},
+		setColumn: (state, action) => {
+			const id = Object.keys(action.payload)[0];
+			const value = Object.values(action.payload)[0];
+			state.columns[id].taskIds = value;
 		},
 		deleteColumn: (state, action) => {
 			const columnId = action.payload;
@@ -90,31 +80,47 @@ export const kanbanSlice = createSlice({
 			state.columnOrder.splice(state.columnOrder.indexOf(columnId), 1);
 		},
 		setColumnTitle: (state, action) => {
-			const columnId = action.payload.id;
-			const newTitle = action.payload.newTitle;
+			// expected { columnId, newTitle }
+			const { columnId, newTitle } = action.payload;
 			state.columns[columnId].title = newTitle;
 		},
-		setTaskTitle: (state, action) => {
-			const taskId = action.payload.id;
-			const newTitle = action.payload.newTitle;
-			state.tasks[taskId].content = newTitle;
+
+		createTask: (state, action) => {
+			const created = action.payload;
+			const id = v4();
+			state.tasks[id] = { id, content: "", steps: [], created };
+			const firstColumnId = state.columnOrder[0];
+			state.columns[firstColumnId].taskIds.push(id);
 		},
-		createTaskStep: (state, action) => {
+		deleteTask: (state, action) => {
+			// expected { columnId, taskId }
+			const { columnId, taskId } = action.payload;
+			state.columns[columnId].tasks.splice(state.columns[columnId].tasks.indexOf(taskId), 1);
+			delete state.tasks[taskId];
+		},
+		setTaskTitle: (state, action) => {
+			// expected { id, newTitle }
+			const { id, newTitle } = action.payload;
+			state.tasks[id].content = newTitle;
+		},
+
+		createStep: (state, action) => {
 			// expected taskid - string
 			const taskId = action.payload;
 			const id = v4();
-			const newStep = { id, content: "", isCompleted: false };
-			state.tasks[taskId].steps.push(newStep);
+			state.steps[id] = { id, content: "", isCompleted: false };
+			state.tasks[taskId].steps.push(id);
 		},
-		updateTaskStep: (state, action) => {
-			// expected step - object {taskid, step: {id, content, isCompleted}}
-			const taskId = action.payload.taskid;
-			const step = {
-				id: action.payload.step.id,
-				content: action.payload.step.content,
-				isCompleted: action.payload.step.content,
-			};
-			state.tasks[taskId].steps.push(step);
+		updateStep: (state, action) => {
+			// expected step - {id, content, isCompleted}}
+			const { id, content, isCompleted } = action.payload;
+			state.steps[id] = { id, content, isCompleted };
+		},
+		deleteStep: (state, action) => {
+			// expected { taskId, stepId }
+			const { taskId, stepId } = action.payload;
+			state.tasks[taskId].steps.splice(state.tasks[taskId].steps.indexOf(stepId), 1);
+			delete state.steps[stepId];
 		},
 	},
 });
@@ -128,8 +134,9 @@ export const {
 	deleteColumn,
 	setColumnTitle,
 	setTaskTitle,
-	createTaskStep,
-	updateTaskStep,
+	createStep,
+	updateStep,
+	deleteStep,
 } = kanbanSlice.actions;
 
 // Selectors
@@ -137,5 +144,6 @@ export const selectHomeIndex = state => state.kanban.homeIndex && Object.values(
 export const selectColumnOrder = state => state.kanban.columnOrder;
 export const selectColumns = state => state.kanban.columns;
 export const selectTasks = state => state.kanban.tasks;
+export const selectSteps = state => state.kanban.steps;
 
 export default kanbanSlice.reducer;

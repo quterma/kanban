@@ -32,7 +32,7 @@ const Task = ({ task, index }) => {
   const onHandleChange = (e) => setNewTitle(e.currentTarget.value);
   // get newTitle from local state and dispath in store
   const updateTaskTitle = () => {
-    dispatch(setTaskTitle({ newTitle: newTitle ? newTitle : 'New Task', id: task.id }));
+    dispatch(setTaskTitle({ id: task.id, newTitle: newTitle ? newTitle : 'New Task' }));
     setEditMode(false);
   }
 
