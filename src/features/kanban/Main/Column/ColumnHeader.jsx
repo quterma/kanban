@@ -28,7 +28,7 @@ const ColumnHeader = ({ title, thisColId }) => {
   const onHandleChange = (e) => setNewTitle(e.currentTarget.value.substring(0, 18))
   // get newTitle from local state and dispath in store
   const updateColumnTitle = () => {
-    dispatch(setColumnTitle({ newTitle: newTitle ? newTitle : 'New Column', id: thisColId }));
+    dispatch(setColumnTitle({ newTitle: newTitle ? newTitle : 'New Column', columnId: thisColId }));
     setEditMode(false);
   }
   // data for dropdownMenu mapping

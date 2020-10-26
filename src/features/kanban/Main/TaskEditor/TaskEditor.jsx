@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { withRouter, useParams, useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import Button from '../../Common/Button/Button';
-import {createStep, selectTasks, setTaskTitle} from './../../kanbanSlice'
+import {createStep, selectTasks, setTaskTitle, deleteTask} from './../../kanbanSlice'
 import TaskStepsInnerList from './TaskStepsInnerList';
 import { Redirect } from "react-router-dom";
 
@@ -32,30 +32,42 @@ const Header = styled.div`
   display: flex;
   align-items: center;
   justify-content: space-between;
-  padding: 20px 5%;
+  padding: 30px 5% 10px 5%;
 `;
-const Title = styled.h3``;
-const Created = styled.h4``;
+const TitleWrapper = styled.div`
+  max-width: 50%;
+`;
+const Title = styled.h3`
+  font-size: 1.5rem;
+  font-weight: 700;
+  padding-left: 10px;
+`;
 const Input = styled.input`
-  width: 400px;
-  line-height: 32px;
-  font-size: 21px;
+  line-height: 1.4rem;
+  font-size: 1.2rem;
+  padding-left: 10px;
+`;
+const Created = styled.h4`
+  margin-top: 12px;
+  font-weight: 400;
+  font-size: 0.8rem;
+  padding-left: 10px;
+`;
+const ButtonsWrapper = styled.div`
+  border: 1px solid grey;
+  border-radius: 5px;
 `;
 const Editarea = styled.div`
   width: 90%;
   height: 75%;
   margin: 20px auto;
-  padding: 40px;
+  padding: 20px 30px;
   font-size: 22px;
   display: block;
   border: 1px solid grey;
   border-radius: 5px;
   background-color: white;
   overflow-y: auto;
-`;
-const Buttons = styled.div`
-  border: 1px solid grey;
-  border-radius: 5px;
 `;
 
 const withThisTaskRedirectHOC = Component => {
@@ -73,6 +85,9 @@ const TaskEditor = () => {
   const dispatch = useDispatch();
   const params = useParams();
   const tasks = useSelector(selectTasks);
+
+  let history = useHistory();
+  const closeEditPage = () => history.push('/');
 
   const task = tasks[params.taskId];
   const taskId = task.id;
@@ -92,24 +107,27 @@ const TaskEditor = () => {
   }
 
   const createNewStep = () => dispatch(createStep(taskId));
-
-  let history = useHistory();
-  const closeEdit = () => history.push('/');
+  const deleteThisTask = () => {
+    closeEditPage();
+    dispatch(deleteTask(taskId));
+  }
 
   return (
     <Wrapper>
       <Container>
         <Header>
-          {editMode ? <Input autoFocus onBlur={updateTaskTitle} onChange={onInputHandleChange} value={newTitle} name='title' />
-            : <div>
-                <Title onDoubleClick={activateEditMode}>{title}</Title>
-              {created && <Created>{created}</Created>}
-              </div>
-          }
-          <Buttons>
+          <TitleWrapper>
+            {editMode ?
+              <Input autoFocus onBlur={updateTaskTitle} onChange={onInputHandleChange} value={newTitle} name='title' />
+              : <Title onDoubleClick={activateEditMode}>{title}</Title>
+            }
+            {created && <Created>{created}</Created>}
+          </TitleWrapper>
+          <ButtonsWrapper>
             <Button onHandleClick={createNewStep} name='Add step' clear />
-            <Button onHandleClick={closeEdit} name='Close edit' clear />
-          </Buttons>
+            <Button onHandleClick={deleteThisTask} name='Delete task' clear />
+            <Button onHandleClick={closeEditPage} name='Close edit' clear />
+          </ButtonsWrapper>
         </Header>
         <Editarea>
           <TaskStepsInnerList stepIds={stepIds} taskId={taskId} />

@@ -8,16 +8,8 @@ export const kanbanSlice = createSlice({
 			// 'stepId': {id: stepId (string), content: string, isCompleted: boolean}
 		},
 		tasks: {
-			"task-1": {
-				id: "task-1",
-				content: "One",
-				steps: [],
-			},
-			"task-2": {
-				id: "task-2",
-				content: "Two",
-				steps: [],
-			},
+			"task-1": { id: "task-1", content: "One", steps: [] },
+			"task-2": { id: "task-2", content: "Two", steps: [] },
 			"task-3": { id: "task-3", content: "Three", steps: [] },
 			"task-4": { id: "task-4", content: "Four", steps: [] },
 		},
@@ -93,9 +85,12 @@ export const kanbanSlice = createSlice({
 			state.columns[firstColumnId].taskIds.push(id);
 		},
 		deleteTask: (state, action) => {
-			// expected { columnId, taskId }
-			const { columnId, taskId } = action.payload;
-			state.columns[columnId].tasks.splice(state.columns[columnId].tasks.indexOf(taskId), 1);
+			// expected taskId
+			const taskId = action.payload;
+			for (let columnId in state.columns) {
+				const taskIndex = state.columns[columnId].taskIds.findIndex(el => el === taskId);
+				if (taskIndex >= 0) state.columns[columnId].taskIds.splice(taskIndex, 1);
+			}
 			delete state.tasks[taskId];
 		},
 		setTaskTitle: (state, action) => {
@@ -137,6 +132,7 @@ export const {
 	createStep,
 	updateStep,
 	deleteStep,
+	deleteTask,
 } = kanbanSlice.actions;
 
 // Selectors

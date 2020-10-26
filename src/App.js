@@ -11,9 +11,16 @@ const GlobalStyle = createGlobalStyle`
   body {
 		font-family: 'Roboto', sans-serif;
 		font-weight: 400;
+		margin: 0;
+		padding: 0;
+		font-size: 18px;
 	}
-	* {
+	*,
+    ::before,
+    ::after {
 		box-sizing: border-box;
+		}
+	* {
 		&::-webkit-scrollbar {
 			height: 9px;
 			width: 9px;
@@ -26,6 +33,9 @@ const GlobalStyle = createGlobalStyle`
 			border-radius: 6px;
 			background-color: rgba(255, 254, 214, 0.6);
 		}
+	}
+	input {
+		outline: thin;
 	}
 `;
 

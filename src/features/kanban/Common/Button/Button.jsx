@@ -12,7 +12,7 @@ const AddItem = styled.button`
   color: ${props => props.light ? '#FFFFFF' : '#5E6C84'};
   padding: 6px;
   &:hover {
-    background-color: ${props => props.disabled ? 'inherit' : '#FFFFFF'};
+    background-color: ${props => props.disabled ? 'inherit' : props.dark ? '#EBECF0' : '#FFFFFF'};
     cursor: ${props => props.disabled ? 'inherit' : 'pointer'};
     color: #5E6C84;
   };
@@ -23,10 +23,10 @@ const Icon = styled.i`
   margin-right: 4px;
 `;
 
-const Button = ({ onHandleClick, disabled, name, light, clear, top }) => {
+const Button = ({ onHandleClick, disabled, name, light, clear, top, dark }) => {
   return (
-    <AddItem onClick={onHandleClick} disabled={disabled} light={light} top={top}>
-      {!clear && <Icon className="fas fa-plus" light={light}></Icon>}
+    <AddItem onClick={onHandleClick} disabled={disabled} light={light} top={top} dark={dark}>
+      {!clear && <Icon className="fas fa-plus" light={light} ></Icon>}
       {name}
     </AddItem>
   )
