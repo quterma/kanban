@@ -1,22 +1,27 @@
 import React from 'react';
 import { useSelector } from "react-redux";
-import { selectColumnOrder,	selectColumns } from "./../kanbanSlice";
+import { selectColumnOrder,	selectColumns } from "./../../redux/kanbanSlice";
 import styled from 'styled-components';
 
 // styling
 const Container = styled.footer`
   height: 55px;
   background: #0067A3;
-  position: relative;
-  padding: 0 20px;
+  padding: 10px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  max-width: 100%;
+`;
+const InfoWrapper = styled.div`
+  padding: 5px;
 `;
 const Info = styled.div`
+  font-size: 1.3rem;
   display: inline-block;
-  font-size: 18px;
-  line-height: 55px;
   color: #FFFFFF;
-  margin-left: ${props => props.left};
-  float: ${props => props.float};
+  margin: 0 10px;
+  text-align: center;
 `;
 
 // заглушка =====
@@ -31,9 +36,14 @@ const Footer = () => {
 
   return (
     <Container>
-      <Info>Active tasks: {activeCount}</Info>
-      <Info left='36px'>Finished tasks: {finishedCount}</Info>
-      <Info float='right'>Kanban board by: {userName}, {date}</Info>
+      <InfoWrapper>
+        <Info>Active tasks:  {activeCount}</Info>
+        <Info>Finished tasks:  {finishedCount}</Info>
+      </InfoWrapper>
+      <InfoWrapper>
+        <Info>Kanban board by:  {userName}</Info>
+        <Info>{date}</Info>
+      </InfoWrapper>
     </Container>
   )
 }

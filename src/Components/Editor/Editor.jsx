@@ -1,12 +1,7 @@
 import React from 'react';
-import { useState } from 'react';
-import { useDispatch, useSelector } from 'react-redux';
-import { withRouter, useParams, useHistory } from "react-router-dom";
 import styled from 'styled-components';
-import Button from '../../Common/Button/Button';
-import {createStep, selectTasks, setTaskTitle, deleteTask} from './../../kanbanSlice'
-import TaskStepsInnerList from './TaskStepsInnerList';
-import { Redirect } from "react-router-dom";
+import Button from './../Shared/Button';
+import StepsInnerList from './StepsInnerList';
 
 // styling
 const Wrapper = styled.div`
@@ -70,47 +65,8 @@ const Editarea = styled.div`
   overflow-y: auto;
 `;
 
-const withThisTaskRedirectHOC = Component => {
-  const RedirectComponent = () => {
-    const params = useParams();
-    const tasks = useSelector(selectTasks);
-    const thisTask = tasks[params.taskId];
-    if (!thisTask) return <Redirect to="/" />;
-    return <Component />;
-  }
-  return RedirectComponent;
-}
-
-const TaskEditor = () => {
-  const dispatch = useDispatch();
-  const params = useParams();
-  const tasks = useSelector(selectTasks);
-
-  let history = useHistory();
-  const closeEditPage = () => history.push('/');
-
-  const task = tasks[params.taskId];
-  const taskId = task.id;
-  const title = task.content;
-  const stepIds = task.steps;
-  const created = task.created;
-  // editMode state for setting new column title
-  const [editMode, setEditMode] = useState(false);
-  const activateEditMode = () => setEditMode(true);
-
-  // title input state and handlers
-  const [newTitle, setNewTitle] = useState(title);
-  const onInputHandleChange = (e) => setNewTitle(e.currentTarget.value)
-  const updateTaskTitle = () => {
-    dispatch(setTaskTitle({ newTitle: newTitle ? newTitle : 'New Task', id: taskId }));
-    setEditMode(false);
-  }
-
-  const createNewStep = () => dispatch(createStep(taskId));
-  const deleteThisTask = () => {
-    closeEditPage();
-    dispatch(deleteTask(taskId));
-  }
+const Editor = ({ updateTaskTitle, onInputHandleChange, activateEditMode, createNewStep, deleteThisTask, closeEditPage,
+  editMode, created, newTitle, title, stepIds, taskId }) => {
 
   return (
     <Wrapper>
@@ -130,11 +86,11 @@ const TaskEditor = () => {
           </ButtonsWrapper>
         </Header>
         <Editarea>
-          <TaskStepsInnerList stepIds={stepIds} taskId={taskId} />
+          <StepsInnerList stepIds={stepIds} taskId={taskId} />
         </Editarea>
       </Container>
     </Wrapper>
   )
 }
 
-export default withThisTaskRedirectHOC(withRouter(TaskEditor));
+export default Editor;

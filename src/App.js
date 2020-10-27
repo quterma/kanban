@@ -1,46 +1,14 @@
 import React from "react";
-import styled, { createGlobalStyle } from "styled-components";
+import styled from "styled-components";
 import { Route, Switch, withRouter } from "react-router-dom";
-import Header from "./features/kanban/Header/Header";
-import MainDragDropContext from "./features/kanban/Main/MainDragDropContext";
-import Footer from "./features/kanban/Footer/Footer";
-import TaskEditor from "./features/kanban/Main/TaskEditor/TaskEditor";
-
-// styling
-const GlobalStyle = createGlobalStyle`
-  body {
-		font-family: 'Roboto', sans-serif;
-		font-weight: 400;
-		margin: 0;
-		padding: 0;
-		font-size: 18px;
-	}
-	*,
-    ::before,
-    ::after {
-		box-sizing: border-box;
-		}
-	* {
-		&::-webkit-scrollbar {
-			height: 9px;
-			width: 9px;
-			}
-		&::-webkit-scrollbar-track {
-			border-radius: 6px;
-			background-color: rgb(14, 43, 38, 0.4);
-		}
-		&::-webkit-scrollbar-thumb {
-			border-radius: 6px;
-			background-color: rgba(255, 254, 214, 0.6);
-		}
-	}
-	input {
-		outline: thin;
-	}
-`;
+import Header from "./Components/Header/Header";
+import MainDragDropContext from "./Components/Main/MainDragDropContext";
+import Footer from "./Components/Footer/Footer";
+import Global from "./styles/global";
+import EditorContainer from "./Components/Editor/EditorContainer";
+import { useWindowSize } from "./utils/useWindowSize";
 
 const Wrapper = styled.div`
-	font-family: 1.2rem;
 	height: 100vh;
 	display: flex;
 	flex-direction: column;
@@ -48,16 +16,18 @@ const Wrapper = styled.div`
 `;
 
 const App = () => {
+	const width = useWindowSize()[0];
+
 	return (
 		<>
-			<GlobalStyle />
+			<Global />
 			<Wrapper>
-				<Header />
+				{width > 400 && <Header />}
 				<Switch>
-					<Route path="/editor/:taskId?" render={() => <TaskEditor />} />
+					<Route path="/editor/:taskId?" render={() => <EditorContainer />} />
 					<Route path="/" render={() => <MainDragDropContext />} />
 				</Switch>
-				<Footer />
+				{width > 400 && <Footer />}
 			</Wrapper>
 		</>
 	);

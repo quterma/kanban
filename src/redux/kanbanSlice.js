@@ -107,9 +107,9 @@ export const kanbanSlice = createSlice({
 			state.tasks[taskId].steps.push(id);
 		},
 		updateStep: (state, action) => {
-			// expected step - {id, content, isCompleted}}
-			const { id, content, isCompleted } = action.payload;
-			state.steps[id] = { id, content, isCompleted };
+			// expected step - {id, content */or/* isCompleted}
+			const id = action.payload.id;
+			state.steps[id] = { ...state.steps[id], ...action.payload };
 		},
 		deleteStep: (state, action) => {
 			// expected { taskId, stepId }

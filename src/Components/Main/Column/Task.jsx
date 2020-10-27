@@ -3,7 +3,7 @@ import { useHistory } from "react-router-dom";
 import styled from 'styled-components';
 import { Draggable } from 'react-beautiful-dnd'
 import { useDispatch } from 'react-redux';
-import { setTaskTitle } from '../../kanbanSlice';
+import { setTaskTitle } from './../../../redux/kanbanSlice';
 
 const Container = styled.div`
   background: #FFFFFF;

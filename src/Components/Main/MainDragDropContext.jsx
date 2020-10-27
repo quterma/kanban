@@ -8,8 +8,8 @@ import {
 	selectColumnOrder,
 	selectColumns,
 	selectTasks,
-} from "../kanbanSlice";
-import { reorder } from "./../Common/utils";
+} from "./../../redux/kanbanSlice";
+import { reorder } from "./../../utils/reorder";
 import { DragDropContext } from "react-beautiful-dnd";
 import Main from "./Main";
 

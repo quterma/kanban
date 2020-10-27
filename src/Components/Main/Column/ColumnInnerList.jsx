@@ -1,5 +1,5 @@
 import React from 'react';
-import Task from "./../Task/Task";
+import Task from "./Task";
 
 // moved out this mapping for avoiding redundant rendering
 const ColumnInnerList = ({ tasks }) =>

@@ -1,17 +1,17 @@
 import React, { useEffect, useRef, useState } from 'react'
-import { Droppable } from "react-beautiful-dnd";
-import MainInnerList from "./MainInnerList";
-import styled from "styled-components";
-import Button from '../Common/Button/Button';
 import { useDispatch } from 'react-redux';
-import { createColumn } from '../kanbanSlice';
+import { Droppable } from "react-beautiful-dnd";
+import styled from "styled-components";
+import { createColumn } from './../../redux/kanbanSlice';
+import MainInnerList from "./MainInnerList";
+import Button from './../Shared/Button';
+import { useWindowSize } from "./../../utils/useWindowSize";
 
-// styling
 const Container = styled.main`
   display: flex;
   align-items: flex-start;
-  justify-content: ${props => props.scroll ? 'start' :'center'};
-  height: 100%;
+  flex-wrap: ${props => props.width < 780 ? 'wrap' : 'nowrap'};
+  justify-content: ${props => props.isOverflow ? 'start' :'center'};
   padding: 20px 0;
 `;
 const Wrapper = styled.div`
@@ -22,34 +22,28 @@ const Wrapper = styled.div`
 `;
 
 const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
+  const width = useWindowSize()[0];
+
   // check overflow for jc-center/start
   const ref = useRef(null);
-  const [scroll, setScroll] = useState(false);
-  useEffect(() => {
-    if (!ref.current) {
-      setScroll(false);
-      return;
-    }
-    const isOverflow = ref.current.getBoundingClientRect().width < ref.current.scrollWidth;
-    setScroll(isOverflow);
-  }, [columnOrder.length]);
+  const [isOverflow, setIsOverflow] = useState(false);
+  useEffect(() => ref.current && setIsOverflow(ref.current.getBoundingClientRect().width < ref.current.scrollWidth));
 
   // const Cols = columnOrder && columnOrder.length > 0
   const [isEmpty, setIsEmpty] = useState(columnOrder.length > 0);
-  useEffect(() => {
-    setIsEmpty(columnOrder.length > 0 ? false : true);
-  }, [columnOrder])
+  useEffect(() => setIsEmpty(columnOrder.length > 0 ? false : true), [columnOrder]);
+
   const dispatch = useDispatch();
   // create new column (with index 1)
   const createNewColumn = () => dispatch(createColumn());
-
+  
   return (
     // wrapper for droppable element ref={provided.innerRef}
-    <Wrapper ref={ref}>
+    <Wrapper ref={ref} >
       {isEmpty ? <Button onHandleClick={createNewColumn} name='Create new list' light top={'40vh'}/> :
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
           {provided => (
-            <Container ref={provided.innerRef} {...provided.droppableProps} scroll={scroll}>
+            <Container ref={provided.innerRef} {...provided.droppableProps} isOverflow={isOverflow} width={width}>
               {/* map columns */}
               {columnOrder.map((columnId, index) => {
                 const column = columns[columnId];

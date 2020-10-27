@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { useDispatch } from "react-redux";
-import { createTask, setColumn } from "./../../kanbanSlice";
+import { createTask, setColumn } from "./../../../redux/kanbanSlice";
 import styled from 'styled-components';
 import { Droppable, Draggable } from 'react-beautiful-dnd';
 import ColumnInnerList from './ColumnInnerList';
-import Button from '../../Common/Button/Button';
-import DropdownMenu from '../../Common/DropdownMenu/DropdownMenu';
-import { reorder } from './../../Common/utils';
+import Button from './../../Shared/Button';
+import DropdownMenu from './../../Shared/DropdownMenu';
+import { reorder } from './../../../utils/reorder';
 import ColumnHeader from './ColumnHeader';
 
 // styling
@@ -19,6 +19,7 @@ const Container = styled.div`
   flex-direction: column;
   border-radius: 10px;
   text-align: left;
+  margin: 20px;
 `;
 const TaskList = styled.div`
   padding: 12px;

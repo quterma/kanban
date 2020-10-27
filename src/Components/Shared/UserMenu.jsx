@@ -1,7 +1,7 @@
 import React from 'react';
 import styled from 'styled-components';
-import ava from './../../../../assets/images/ava.svg';
-import arrow from './../../../../assets/images/arrow.svg';
+import ava from './../../images/ava.svg';
+import arrow from './../../images/arrow.svg';
 
 // styling
 const Container = styled.div`

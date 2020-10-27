@@ -2,10 +2,10 @@ import React, { useState } from 'react'
 import { useDispatch } from 'react-redux';
 import { withRouter, useLocation } from "react-router-dom";
 import styled from 'styled-components';
-import Button from '../Common/Button/Button';
-import UserMenu from '../Common/UserMenu/UserMenu';
-import { createColumn } from '../kanbanSlice';
-import DropdownMenu from './../Common/DropdownMenu/DropdownMenu';
+import Button from './../Shared/Button';
+import UserMenu from './../Shared/UserMenu';
+import { createColumn } from './../../redux/kanbanSlice';
+import DropdownMenu from './../Shared/DropdownMenu';
 
 // styling
 const Container = styled.header`

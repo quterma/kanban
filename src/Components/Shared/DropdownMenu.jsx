@@ -1,6 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
-import OutsideDetector from '../outsideDetector';
+import OutsideDetector from './../../utils/outsideDetector';
 
 const Container = styled.ul`
   position: absolute;

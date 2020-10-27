@@ -1,9 +1,9 @@
 import React, { useState } from 'react';
 import styled from 'styled-components';
-import DropdownMenu from './../../Common/DropdownMenu/DropdownMenu';
-import Button from './../../Common/Button/Button';
+import DropdownMenu from './../../Shared/DropdownMenu';
+import Button from './../../Shared/Button';
 import { useDispatch } from 'react-redux';
-import { deleteColumn, setColumnTitle } from '../../kanbanSlice';
+import { deleteColumn, setColumnTitle } from './../../../redux/kanbanSlice';
 
 const Title = styled.h3`
   padding: 12px;
