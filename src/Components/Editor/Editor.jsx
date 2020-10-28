@@ -1,5 +1,6 @@
 import React from 'react';
 import styled from 'styled-components';
+import { useWindowSize } from '../../utils/useWindowSize';
 import Button from './../Shared/Button';
 import StepsInnerList from './StepsInnerList';
 
@@ -31,16 +32,22 @@ const Header = styled.div`
 `;
 const TitleWrapper = styled.div`
   max-width: 50%;
+  height: 55px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
 `;
 const Title = styled.h3`
-  font-size: 1.5rem;
+  font-size: 1.3rem;
+  height: 1.5rem;
   font-weight: 700;
   padding-left: 10px;
 `;
 const Input = styled.input`
   line-height: 1.4rem;
-  font-size: 1.2rem;
+  font-size: 1.3rem;
   padding-left: 10px;
+  border: none;
 `;
 const Created = styled.h4`
   margin-top: 12px;
@@ -51,6 +58,11 @@ const Created = styled.h4`
 const ButtonsWrapper = styled.div`
   border: 1px solid grey;
   border-radius: 5px;
+  display: flex;
+  align-items: center;
+  justify-content: flex-end;
+  flex-wrap: wrap;
+  max-width: 40%;
 `;
 const Editarea = styled.div`
   width: 90%;
@@ -67,6 +79,8 @@ const Editarea = styled.div`
 
 const Editor = ({ updateTaskTitle, onInputHandleChange, activateEditMode, createNewStep, deleteThisTask, closeEditPage,
   editMode, created, newTitle, title, stepIds, taskId }) => {
+
+  const width = useWindowSize()[0];
 
   return (
     <Wrapper>

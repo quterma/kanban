@@ -15,13 +15,12 @@ const InputsWrapper = styled.div`
   padding: 2px;
 `;
 const CheckboxContainer = styled.div`
-  padding: 2px 9px;
-  height: 40px;
+  min-height: 40px;
 `;
 const InputContainer = styled.div`
-  padding: 2px 8px;
-  height: 40px;
+  min-height: 40px;
   width: 100%;
+  padding-left: 10px;
 `;
 const CheckBox = styled.input`
   -ms-transform: scale(1.5); /* IE */
@@ -32,19 +31,21 @@ const CheckBox = styled.input`
   margin: 0;
 `;
 const Content = styled.p`
-  font-size: 21px;
+  font-size: 1.2rem;
+  line-height: 2rem;
   margin: 0;
   padding: 0;
-  height: 100%;
   text-decoration: ${props => props.isCompleted && 'line-through #0000ffa9'};
 `;
 const Input = styled.input`
   width: 100%;
   flex: 1;
-  height: 100%;
+  line-height: 2rem;
   padding: 0;
-  font-size: 21px;
+  font-size: 1.2rem;
+  border: none;
   margin: 0;
+  text-decoration: underline;
 `;
 
 const Step = ({ onHandleToggle, updateThisStep, onHandleChange, activateEditMode,

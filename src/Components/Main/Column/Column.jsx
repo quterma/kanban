@@ -35,30 +35,20 @@ const ColumnHeaderContainer = styled.div`
   outline: none;
 `;
 
-const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, taskMap }) => {
+const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder }) => {
   const prevColumn = columns[columnOrder[index - 1]];
   const thisColumn = columns[columnOrder[index]];
 
   return (
-    // Draggable wrapper - makes everything  draggable
     <Draggable draggableId={column.id} index={index}>
       {(provided) => (
         <Container ref={provided.innerRef} {...provided.draggableProps}>
-          {/* Title here has draghandling props which makes this element to be a draghandler */}
           <ColumnHeaderContainer {...provided.dragHandleProps}>
-            <ColumnHeader
-                title={column.title}
-                thisColId={columnOrder[index]}
-            />
+            <ColumnHeader title={column.title} thisColId={columnOrder[index]} />
           </ColumnHeaderContainer>
-          {/* wrapper for droppable element */}
           <Droppable droppableId={column.id} isDropDisabled={isDropDisabled} type='task' top='100px'>
             {(provided, snapshot) => (
-              <TaskList
-              ref={provided.innerRef}
-              {...provided.droppableProps}
-              isDraggingOver={snapshot.isDraggingOver}
-              >
+              <TaskList ref={provided.innerRef} {...provided.droppableProps} isDraggingOver={snapshot.isDraggingOver}>
                 <ColumnInnerList tasks={tasks} />
                 {provided.placeholder}
               </TaskList>

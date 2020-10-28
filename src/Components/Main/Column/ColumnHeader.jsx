@@ -7,15 +7,17 @@ import { deleteColumn, setColumnTitle } from './../../../redux/kanbanSlice';
 
 const Title = styled.h3`
   padding: 12px;
-  font-size: 18px;
+  font-size: 1.2rem;
 `;
 const RelativeContainer = styled.div`
   position: relative;
 `;
 const Input = styled.input`
   margin-left: 12px;
+  font-size: 1.2rem;
   width: 160px;
   line-height: 21px;
+  border: none;
 `;
 
 const ColumnHeader = ({ title, thisColId }) => {
@@ -65,7 +67,7 @@ const ColumnHeader = ({ title, thisColId }) => {
         </RelativeContainer>
         : <Button
           onHandleClick={() => setIsDropdown(true)}
-          name={'. . .'}
+          name={' ... '}
           clear
         />
       }

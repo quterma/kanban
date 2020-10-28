@@ -7,7 +7,6 @@ import Footer from "./Components/Footer/Footer";
 import Global from "./styles/global";
 import EditorContainer from "./Components/Editor/EditorContainer";
 import { useWindowSize } from "./utils/useWindowSize";
-import UserMenu from "./Components/Shared/UserMenu";
 
 const Wrapper = styled.div`
 	height: 100vh;

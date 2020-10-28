@@ -7,7 +7,6 @@ import {
 	selectHomeIndex,
 	selectColumnOrder,
 	selectColumns,
-	selectTasks,
 } from "./../../redux/kanbanSlice";
 import { reorder } from "./../../utils/reorder";
 import { DragDropContext } from "react-beautiful-dnd";
@@ -18,7 +17,6 @@ const MainDragDropContext = () => {
   const dispatch = useDispatch();
 	const columnOrder = useSelector(selectColumnOrder);
 	const columns = useSelector(selectColumns);
-	const tasks = useSelector(selectTasks);
 	const homeIndex = useSelector(selectHomeIndex);
 
 	// ===== A drag has started. DnD use this responder to block updates to all <Draggable /> and <Droppable /> components during a drag.
@@ -90,7 +88,7 @@ const MainDragDropContext = () => {
   return (
 			// DragDropContext - context area for DnD actions
 			<DragDropContext onDragStart={onDragStart} onDragEnd={onDragEnd}>
-				<Main columnOrder={columnOrder} columns={columns} homeIndex={homeIndex} tasks={tasks} />
+				<Main columnOrder={columnOrder} columns={columns} homeIndex={homeIndex} />
 			</DragDropContext>
   )
 }

@@ -3,9 +3,9 @@ import { useDispatch } from 'react-redux';
 import { Droppable } from "react-beautiful-dnd";
 import styled from "styled-components";
 import { createColumn } from './../../redux/kanbanSlice';
-import MainInnerList from "./MainInnerList";
 import Button from './../Shared/Button';
 import { useWindowSize } from "./../../utils/useWindowSize";
+import ColumnMap from './Column/ColumnMap';
 
 const Container = styled.main`
   display: flex;
@@ -21,7 +21,7 @@ const Wrapper = styled.div`
   text-align: center;
 `;
 
-const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
+const Main = ({ columnOrder, columns, homeIndex }) => {
   const width = useWindowSize()[0];
 
   // check overflow for jc-center/start
@@ -44,23 +44,7 @@ const Main = ({ columnOrder, columns, homeIndex, tasks }) => {
         <Droppable droppableId="all-columns" direction="horizontal" type="column">
           {provided => (
             <Container ref={provided.innerRef} {...provided.droppableProps} isOverflow={isOverflow} width={width}>
-              {/* map columns */}
-              {columnOrder.map((columnId, index) => {
-                const column = columns[columnId];
-                // condition disabling droppable if you move from right to left or try to move furtherer than to the next list
-                const isDropDisabled = index < homeIndex || index > homeIndex + 1;
-                return (
-                  <MainInnerList
-                    key={column.id}
-                    column={column}
-                    taskMap={tasks}
-                    isDropDisabled={isDropDisabled}
-                    index={index}
-                    columns={columns}
-                    columnOrder={columnOrder}
-                  />
-                );
-              })}
+              <ColumnMap columnOrder={columnOrder} columns={columns} homeIndex={homeIndex}/>
               {provided.placeholder}
             </Container>
           )}
