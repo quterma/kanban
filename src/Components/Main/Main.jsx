@@ -27,9 +27,8 @@ const Main = ({ columnOrder, columns, homeIndex }) => {
   // check overflow for jc-center/start
   const ref = useRef(null);
   const [isOverflow, setIsOverflow] = useState(false);
-  useEffect(() => ref.current && setIsOverflow(ref.current.getBoundingClientRect().width < ref.current.scrollWidth));
+  useEffect(() => ref.current && setIsOverflow(ref.current.getBoundingClientRect().width < ref.current.scrollWidth),[width, columnOrder.length]);
 
-  // const Cols = columnOrder && columnOrder.length > 0
   const [isEmpty, setIsEmpty] = useState(columnOrder.length > 0);
   useEffect(() => setIsEmpty(columnOrder.length > 0 ? false : true), [columnOrder]);
 

@@ -1,6 +1,5 @@
 import React from 'react';
 import styled from 'styled-components';
-import { useWindowSize } from '../../utils/useWindowSize';
 import Button from './../Shared/Button';
 import StepsInnerList from './StepsInnerList';
 
@@ -79,8 +78,6 @@ const Editarea = styled.div`
 
 const Editor = ({ updateTaskTitle, onInputHandleChange, activateEditMode, createNewStep, deleteThisTask, closeEditPage,
   editMode, created, newTitle, title, stepIds, taskId }) => {
-
-  const width = useWindowSize()[0];
 
   return (
     <Wrapper>
