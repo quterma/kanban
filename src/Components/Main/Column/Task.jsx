@@ -9,18 +9,21 @@ const Container = styled.div`
   background: #FFFFFF;
   border-radius: 5px;
   width: 100%;
-  padding: 4px 8px;
-  min-height: 34px;
+  padding: 0 8px;
+  height: 2.5rem;
   margin: 0 auto 15px auto;
   background-color: ${props => props.isDragging ? '#9ae455' : 'white'};
   outline: none;
 `;
 const Input = styled.input`
   width: 100%;
+  border: none;
+  line-height: 2.4rem;
+  font-size: 1.1rem;
 `;
 const Title = styled.h3`
-  line-height: 26px;
-  font-size: 18px;
+  line-height: 2.5rem;
+  font-size: 1.1rem;
 `;
 
 const Task = ({ task, index }) => {
@@ -38,7 +41,7 @@ const Task = ({ task, index }) => {
 
   let history = useHistory();
   const handleDoubleClick = () => history.push(`/editor/${task.id}`);
-  console.log('render');
+
   return (
     // Draggable element
     <Draggable draggableId={task.id} index={index} >

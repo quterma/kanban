@@ -9,11 +9,14 @@ import DropdownMenu from './../../Shared/DropdownMenu';
 import { reorder } from './../../../utils/reorder';
 import ColumnHeader from './ColumnHeader';
 
-// styling
+const Wrapper = styled.div`
+  padding: 0 20px;
+  height: 100%;
+`;
 const Container = styled.div`
   border: 1px solid lightgrey;
   min-width: 282px;
-  max-height: 95%;
+  max-height: 80vh;
   background-color: #EBECF0;
   display: flex;
   flex-direction: column;
@@ -35,10 +38,6 @@ const RelativeContainer = styled.div`
   position: relative;
   height: 48px;
   width: 100%;
-`;
-const Wrapper = styled.div`
-  padding: 0 20px;
-  height: 100%;
 `;
 const ColumnHeaderContainer = styled.div`
   display: flex;
@@ -112,7 +111,7 @@ const Column = ({ column, tasks, index, isDropDisabled, columns, columnOrder, ta
           </Droppable>
           <RelativeContainer>
             {isDropdown ?
-                <DropdownMenu mappingData={dropDownTasks} onSubmit={addTask} onHandleLeave={() => setIsDropdown(false)} right='50%' top='-100px'/>
+                <DropdownMenu mappingData={dropDownTasks} onSubmit={addTask} onHandleLeave={() => setIsDropdown(false)} right='50%' top='-120px'/>
               : <Button
                 onHandleClick={index === 0 ? createNewTask : () => setIsDropdown(true)}
                 disabled={addTaskDisabled}

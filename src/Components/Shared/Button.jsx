@@ -7,7 +7,7 @@ const AddItem = styled.button`
   border-radius: 5px;
   border: none;
   outline: none;
-  font-size: 18px;
+  font-size: 1.2rem;
   transition: 0.2s ease;
   color: ${props => props.light ? '#FFFFFF' : '#5E6C84'};
   padding: 6px;

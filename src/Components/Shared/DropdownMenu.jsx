@@ -19,8 +19,9 @@ const Container = styled.ul`
   overflow-y: auto;
 `;
 const Unit = styled.li`
-  font-size: 18px;
-  line-height: 21px;
+  text-align: left;
+  font-size: 1.2rem;
+  line-height: 1.4rem;
   padding: 8px;
   display: block;
   cursor: pointer;
@@ -31,9 +32,7 @@ const Unit = styled.li`
 
 const DropdownMenu = ({ onSubmit, onHandleLeave, mappingData, right, top }) => {
 
-  const onHandleClick = (event) => {
-    onSubmit(event.currentTarget);
-  }
+  const onHandleClick = (event) => onSubmit(event.currentTarget);
 
   const InnerList = mappingData.map(el => <Unit key={el.id} id={el.id} onClick={onHandleClick}>{el.content}</Unit>);
   return (

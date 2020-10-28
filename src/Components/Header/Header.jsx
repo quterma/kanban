@@ -1,58 +1,66 @@
-import React, { useState } from 'react'
+import React from 'react'
 import { useDispatch } from 'react-redux';
 import { withRouter, useLocation } from "react-router-dom";
 import styled from 'styled-components';
 import Button from './../Shared/Button';
 import UserMenu from './../Shared/UserMenu';
 import { createColumn } from './../../redux/kanbanSlice';
-import DropdownMenu from './../Shared/DropdownMenu';
+import { useWindowSize } from '../../utils/useWindowSize';
 
-// styling
 const Container = styled.header`
-  height: 55px;
   background: #0067A3;
-  position: relative;
+  display: flex;
+  justify-content: ${props => props.width > 600 ? 'space-between' : 'flex-end'};
+  align-items: center;
+  padding: 5px 30px;
+`;
+const Title = styled.h2`
+  font-size: 1.8rem;
+  color: #FFFFFF;
+`;
+const Right = styled.div`
   display: flex;
   justify-content: space-between;
-  padding-right: 150px;
+  align-items: center;
 `;
-
-const Title = styled.h2`
-  font-size: 28px;
-  line-height: 33px;
-  color: #FFFFFF;
-  padding: 11px 0 18px 20px;
+const SmallContainer = styled.div`
+  background: #0079BF;
+  width: 100%;
+  display: block;
+  text-align: right;
+  padding: 10px 20px;
 `;
 
 function Header() {
+  const width = useWindowSize()[0];
+  
   const isEditor = useLocation().pathname.startsWith('/editor');
-  // for switching button to dropdown menu
-  const [isDropdown, setIsDropdown] = useState(false);
-  const showDropdown = () => setIsDropdown(true);
-  const hideDropdown = () => setIsDropdown(false);
 
-  // ========================   Заглушки!!!   ================
-  const dropDownItems = [{ id: '1', content: 'Profile' }, { id: '2', content: 'Log Out' }];
-  const onDropdownSubmit = data => {
-    console.log(`Hey! This is currently unavailable. You pressed "${data.innerHTML}" item. Good for you! :)`);
-    hideDropdown();
-  }
   const dispatch = useDispatch();
-  // create new column (with index 1)
+
   const createNewColumn = () => dispatch(createColumn());
 
+  if (width < 480) {
+    return (
+      <SmallContainer>
+        <UserMenu />
+      </SmallContainer>
+    )
+  }
+
   return (
-    <Container>
-      <Title>Awesome Kanban Board</Title>
-      {isEditor ||
+    <Container width={width}>
+      {width > 600 && <Title>Awesome Kanban Board</Title>}
+      <Right>
+        {isEditor ||
         <Button
           onHandleClick={createNewColumn}
           name='Create new list'
           light
         />
-      }
-      <UserMenu top='8px' right='22px' onHandleClick={showDropdown} open={isDropdown}/>
-      {isDropdown && <DropdownMenu mappingData={dropDownItems} onSubmit={onDropdownSubmit} onHandleLeave={hideDropdown} right='1%' top='50px'/>}
+        }
+        <UserMenu />
+      </Right>
     </Container>
   )
 }

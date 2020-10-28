@@ -7,6 +7,7 @@ import Footer from "./Components/Footer/Footer";
 import Global from "./styles/global";
 import EditorContainer from "./Components/Editor/EditorContainer";
 import { useWindowSize } from "./utils/useWindowSize";
+import UserMenu from "./Components/Shared/UserMenu";
 
 const Wrapper = styled.div`
 	height: 100vh;
@@ -22,12 +23,12 @@ const App = () => {
 		<>
 			<Global />
 			<Wrapper>
-				{width > 400 && <Header />}
+				<Header />
 				<Switch>
 					<Route path="/editor/:taskId?" render={() => <EditorContainer />} />
 					<Route path="/" render={() => <MainDragDropContext />} />
 				</Switch>
-				{width > 400 && <Footer />}
+				{width > 480 && <Footer />}
 			</Wrapper>
 		</>
 	);

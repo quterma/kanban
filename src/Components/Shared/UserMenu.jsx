@@ -1,16 +1,17 @@
-import React from 'react';
+import React, { useState } from 'react';
 import styled from 'styled-components';
 import ava from './../../images/ava.svg';
 import arrow from './../../images/arrow.svg';
+import DropdownMenu from './DropdownMenu';
 
-// styling
+const Wrapper = styled.div`
+  margin-left: 20px;
+  display: inline-block;
+`;
 const Container = styled.div`
   display: flex;
   align-items: center;
   justify-content: center;
-  position: absolute;
-  top: ${props => props.top};
-  right: ${props => props.right};
   cursor: pointer;
   transition: 0.2s ease;
   &:hover { opacity: 0.8 }
@@ -36,14 +37,30 @@ const Arrow = styled.img`
   margin-left: 8px;
 `;
 
-const UserMenu = ({ top, right, onHandleClick, open }) => {
+const UserMenu = () => {
+
+  // for switching button to dropdown menu
+  const [isDropdown, setIsDropdown] = useState(false);
+  const showDropdown = () => setIsDropdown(true);
+  const hideDropdown = () => setIsDropdown(false);
+
+  // ========================   Заглушки   ================
+  const dropDownItems = [{ id: 'profile', content: 'Profile' }, { id: 'logout', content: 'Log Out' }];
+  const onDropdownSubmit = data => {
+    console.log(`Hey! This is currently unavailable. You pressed "${data.id}" item. Good for you! :)`);
+    hideDropdown();
+  }
+
   return (
-    <Container top={top} right={right} onClick={onHandleClick}>
-      <Frame>
-        <Avatar src={ava} alt='avatar'/>
-      </Frame>
-      <Arrow src={arrow} alt='arrow' open={open}/>
-    </Container>
+    <Wrapper>
+      <Container onClick={showDropdown}>
+        <Frame>
+          <Avatar src={ava} alt='avatar'/>
+        </Frame>
+        <Arrow src={arrow} alt='arrow' open={isDropdown}/>
+      </Container>
+      {isDropdown && <DropdownMenu mappingData={dropDownItems} onSubmit={onDropdownSubmit} onHandleLeave={hideDropdown} right='1%' top='50px'/>}
+    </Wrapper>
   )
 }
 
