@@ -1,5 +1,6 @@
-import { createGlobalStyle } from "styled-components";
 import px2vw from "./px2vw";
+
+import { createGlobalStyle } from "styled-components";
 
 const Global = createGlobalStyle`
 *, body {
@@ -22,7 +23,7 @@ const Global = createGlobalStyle`
     background-color: rgba(255, 254, 214, 0.6);
   }
 }
-
+ 
 :root {
     font-size: ${px2vw(48)};
 
