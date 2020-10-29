@@ -2,7 +2,7 @@
   "name": "kanban",
   "version": "0.1.0",
   "private": true,
-  "homepage": "https://quterma.github.io/test",
+  "homepage": "https://quterma.github.io/kanban",
   "dependencies": {
     "@atlaskit/css-reset": "^6.0.3",
     "@reduxjs/toolkit": "^1.1.0",
